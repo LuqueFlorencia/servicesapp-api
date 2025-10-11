@@ -11,8 +11,8 @@ Este repositorio contiene la lógica de funciones, servicios y repositorios para
 - **npm**
 - **Firebase CLI** instalada globalmente:
   ``` bash
-    npm install -g firebase-tools
-    firebase --version
+  npm install -g firebase-tools
+  firebase --version
   ```
 
 
@@ -20,12 +20,12 @@ Este repositorio contiene la lógica de funciones, servicios y repositorios para
 
 1️⃣ Clonar el repositorio
   ``` bash
-    git clone https://github.com/<organizacion>/servicesapp.git
-    cd servicesapp/functions
-    npm install
+  git clone https://github.com/<organizacion>/servicesapp.git
+  cd servicesapp/functions
+  npm install
 
-    ## Iniciar sesión en Firebase CLI (solo la primera vez)
-    firebase login
+  ## Iniciar sesión en Firebase CLI (solo la primera vez)
+  firebase login
   ```
 
 2️⃣ Descargar tus credenciales de Firebase
@@ -48,9 +48,10 @@ La URL del RTDB ya es la del proyecto oficial, no la cambies.
 4️⃣ Ejecutar en modo local (emuladores)
 
 Para correr las funciones y probar la conexión al RTDB:
-``` bash
-    firebase emulators:start --only functions,database,auth
-```
+  ``` bash
+  ## Inicialmente solo se necesita functions
+  firebase emulators:start --only functions, database, auth
+  ```
 
 Esto levantará:
 * Functions → http://localhost:5001
@@ -63,6 +64,7 @@ El proyecto está preparado para detectar automáticamente los emuladores (no se
 
 ## 📁 Estructura del proyecto
 
+```text
 functions/
 ├── config/
 │   └── environment.js
@@ -85,3 +87,4 @@ functions/
 ├── index.js
 ├── .env
 └── firebase.json
+```
