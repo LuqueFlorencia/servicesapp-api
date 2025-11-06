@@ -1,12 +1,9 @@
-const  { getUserDataID, createUserDatabase } = require('../../repositories/user.repository');
+const { createUserDatabase } = require('../../repositories/user.repository');
 
-async function createUserData(data){
-    try {
-        const user = await getUserDataID(userUid);
-        return user;
-    } catch (error) {
-        
-    }
-}
+async function createUserData(payload) {
+    const { uid, ...user } = payload;
+    const created = await createUserDatabase(uid, user);
+    return created;
+};
 
 module.exports = { createUserData };

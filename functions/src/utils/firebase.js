@@ -1,7 +1,6 @@
-// /functions/src/utils/firebase.js
 const { initializeApp, getApp, getApps, cert } = require('firebase-admin/app');
 const { getDatabase } = require('firebase-admin/database');
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '..', '..', '.env') });
 const sa = require(`../../permissions/${process.env.CREDENTIALS_FILE_NAME}`);
 
 let firebaseAdmin;

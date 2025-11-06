@@ -1,8 +1,8 @@
 const { firebaseAdmin } = require('./firebase.js');
 const { getAuth } = require('firebase-admin/auth');
+const { httpStatusCodes } = require('./httpsStatusCode');
 
 const auth = getAuth(firebaseAdmin);
-
 const appToken = process.env.APP_INTERNAL_TOKEN;
 
 const validateFirebaseIdToken = async (req, res, next) => {
@@ -40,14 +40,13 @@ const validateInternalFirebaseFunctionsToken = (req, res, next) => {
         });
     };
 
-    if (!idToken !== appToken) {
+    if (idToken !== appToken) { 
         return res.status(httpStatusCodes.forbidden).json({
             error: 'Unauthorized',
         });
     };
 
-    next();
-    return;
+    return next();
 };
 
 module.exports = {

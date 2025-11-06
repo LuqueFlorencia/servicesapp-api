@@ -1,27 +1,32 @@
 const { db } = require('../utils/firebase');
-const { httpStatusCodes, ResourceNotFoundError } = require('../utils/httpsStatusCode');
+const { ResourceNotFoundError } = require('../utils/httpsStatusCode');
 
 async function getUserDataId(userId){
-    const userRef = db.ref(`users/${userId}`)
-    const userSnapshot = await userRef.once('value');
-    const userData = userSnapshot.val();
-    userData.id = userRef.key;
+    const ref = db.ref(`users/${userId}`)
+    const snapshot = await ref.once('value');
+    const data = snapshot.val();
 
-    if (!userData)
-        throw new ResourceNotFoundError('User not found');
+    if (!data) throw new ResourceNotFoundError('No se encontro el usuario.');
 
-    return userData;
+    return { ...data, id: ref.key };
 };
 
-async function createUserDatabase(data) {
-    const userRef = await db.ref(`user/`).push(data);
-    const userSnapshot = await userRef.once('value');
-    let value = userSnapshot.val();
-    value.id = userRef.key;
-    return value;
+async function updateMyProfile(uid, payload) {
+    const ref = db.ref(`users/${uid}`);
+    await ref.update(payload);
+    const snapshot = await ref.once('value');
+    return { ...snapshot.val(), id: uid };
+}
+
+async function createUserDatabase(uid, payload) {
+    const ref = db.ref(`users/${uid}`);
+    await ref.set(payload);
+    const snapshot = await ref.once('value');
+    return { ...snapshot.val(), id: uid };
 };
 
 module.exports = { 
     getUserDataId, 
+    updateMyProfile,
     createUserDatabase, 
 };

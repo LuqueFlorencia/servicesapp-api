@@ -5,6 +5,20 @@ class DataValidationError extends Error {
     };
 };
 
+class BadRequestError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'BadRequestError';
+    };
+};
+
+class NotFoundError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'NotFoundError';
+    };
+};
+
 class DatabaseError extends Error {
     constructor(message) {
         super(message);
@@ -33,7 +47,7 @@ const httpStatusCodes = {
     badRequest: 400,
     unauthorized: 401,
     forbidden: 403,
-    notF0ound: 404,
+    notFound: 404,
     conflict: 409,
     unprocessableEntity: 422,
     tooManyRequests: 429,
@@ -43,6 +57,8 @@ const httpStatusCodes = {
 module.exports = { 
     httpStatusCodes, 
     DataValidationError, 
+    BadRequestError,
+    NotFoundError,
     DatabaseError, 
     AuthorizationError, 
     ResourceNotFoundError 

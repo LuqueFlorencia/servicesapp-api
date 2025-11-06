@@ -1,4 +1,33 @@
-exports.users = require('./modules/users');
+const functions = require('firebase-functions/v1');
+const admin = require('firebase-admin');
+
+admin.initializeApp();
+
+exports.onAuthCreateProfile = functions.auth.user().onCreate(async (user) => {
+    const uid = user.uid;
+    const email = user.email ?? '';
+    const db = admin.database();
+
+    const profile = {
+        role: 'client',
+        email,
+        personal: {
+            displayName: user.displayName ?? '',
+            photoURL: user.photoURL ?? '',
+            address: '',
+            city: '',
+            province: '',
+            ratingAvg: 0,
+            ratingCount: 0,
+        },
+        premium: { active: false, plan: 'standard', paused: false, since: null },
+        services: {},
+    };
+
+    await db.ref(`users/${uid}`).set(profile);
+});
+
+exports.users = require('./modules/users').endpoints;
 
 /**
  * Import function triggers from their respective submodules:

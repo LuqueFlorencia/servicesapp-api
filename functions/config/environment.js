@@ -16,13 +16,13 @@ switch (nodeEnv) {
         environmentFile = '.env';
         break;
     case "dev":
-        environmentFile = '.env.dev';
+        environmentFile = '.env';
         break;
     case "test":
-        environmentFile = '.env.dev';
+        environmentFile = '.env';
         break;
     default:
-        environmentFile = '.env.dev';
+        environmentFile = '.env';
         break;
 }
 

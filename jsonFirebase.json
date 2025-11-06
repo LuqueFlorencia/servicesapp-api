@@ -1,0 +1,106 @@
+{
+	"services": {
+		"{categoryId}": {
+			"{serviceId}": {
+				"title": "Peinados",
+				"photoURL": "https://pixabay.com/es/photos/backstage-modelo-belleza-peinado-617923/",
+				"price": 20000,
+				"active": true,
+				"createdAt": 1730332800000,
+				"galery": [
+					{
+						"title": "Peinados",
+						"photoURL": "https://pixabay.com/es/photos/backstage-modelo-belleza-peinado-617923/"
+					}, 
+					{
+						"title": "Peinados2",
+						"photoURL": "https://pixabay.com/es/photos/backstage-modelo-belleza-peinado-617923/"
+					}
+				],
+				"providers": {
+					"{proUid}": true,
+					"{proUid2}": true
+				},
+				"reviews": {
+					"{reviewId}": {
+						"clientUid": "{uid}",
+						"proUid": "{proUid}",
+						"rating": 5,
+						"comment": "Excelente",
+						"createdAt": 1730332800000
+					}
+				},
+				"schedule": {
+					"2025-10-20": {
+						"10:00": { "status": "free" },
+						"11:00": { "status": "booked", "appointmentId": "{appointmentId}" }
+					}
+				},
+				"appointments": {
+					"{appointmentId}": {
+						"clientUid": "{uid}",
+						"proUid": "{proUid}",
+						"date": "2025-10-20",
+						"time": "11:00",
+						"status": "REQUESTED",
+						"price": 20000,
+						"createdAt": 1730332800000
+					}
+				}
+			}
+		}
+	},
+	"personalizeServices": {
+		"{categoryId}": {
+			"{personalizeServicesId}": {
+				"title": "Peinados",
+				"details": "Peinados Detalles",
+				"galery": [
+					{
+						"subtitle": "Peinados",
+						"photoURL": "https://pixabay.com/es/photos/backstage-modelo-belleza-peinado-617923/"
+					}, 
+					{
+						"subtitle": "Peinados2",
+						"photoURL": "https://pixabay.com/es/photos/backstage-modelo-belleza-peinado-617923/"
+					}
+				],
+				"active": true,
+				"createdAt": 1730332800000
+			}
+		}
+	},
+	"categories": {
+		"{categoryId}": {
+			"title": "Belleza",
+			"icon": "scissors"
+		}
+	},
+	"users": {
+		"{uid}": {
+			"role": "pro", // puede ser "client" o "pro" de profesional
+			"email": "flor@example.com",
+			"personal": {
+				"displayName": "Florencia",
+				"photoURL": "https://pixabay.com/es/illustrations/ai-generado-mujer-noche-perfil-8958993/",
+				"address": "Sarmiento 100",
+				"city": "Resistencia",
+				"province": "Chaco",
+				"ratingAvg": 9,
+				"ratingCount": 95
+			},
+			"premium": { 
+				"active": true, 
+				"plan": "standard", 
+				"paused": false, 
+				"since": 1730332800000 
+			}
+		},
+		"services": {
+			"{categoryId}": {
+				"{serviceId}": true,
+				"{servicePersonalizeId}": true
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "emu:functions": "firebase emulators:start --only functions",
+    "emu:all": "firebase emulators:start",
+    "deploy:functions": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "shell": "firebase functions:shell"
+  },
+  "devDependencies": {
+    "firebase-tools": "^13.35.1"
+  }
+}

@@ -1,12 +1,8 @@
-const  { getUserDataID } = require('../../repositories/user.repository');
+const  { getUserDataId } = require('../../repositories/user.repository');
 
 async function getUserId(userId){
-    try {
-        const user = await getUserDataID(userId);
-        return user;
-    } catch (error) {
-        
-    }
+    const user = await getUserDataId(userId);
+    return user;
 }
 
 module.exports = { getUserId };
