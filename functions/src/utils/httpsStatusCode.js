@@ -40,6 +40,13 @@ class ResourceNotFoundError extends Error {
     };
 };
 
+class EmptySetError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "EmptySetError"
+    }
+}
+
 const httpStatusCodes = {
     ok: 200,
     created: 201,
@@ -61,5 +68,6 @@ module.exports = {
     NotFoundError,
     DatabaseError, 
     AuthorizationError, 
-    ResourceNotFoundError 
+    ResourceNotFoundError,
+    EmptySetError
 };

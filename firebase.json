@@ -19,9 +19,19 @@
     "rules": "database.rules.json"
   },
   "emulators": {
-    "functions": { "port": 5001 },
-    "auth": { "port": 9099 },
-    "database": { "port": 9000 },
-    "ui": { "enabled": true, "port": 4000 }
+    "functions": {
+      "port": 5001
+    },
+    "auth": {
+      "port": 9099
+    },
+    "database": {
+      "port": 9000
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
   }
 }
