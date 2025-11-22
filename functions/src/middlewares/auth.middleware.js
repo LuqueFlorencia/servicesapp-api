@@ -1,6 +1,6 @@
-const { firebaseAdmin } = require('./firebase.js');
+const { firebaseAdmin } = require('../utils/firebase.js');
 const { getAuth } = require('firebase-admin/auth');
-const { httpStatusCodes } = require('./httpsStatusCode');
+const { httpStatusCodes } = require('../utils/httpsStatusCode.js');
 
 const auth = getAuth(firebaseAdmin);
 const appToken = process.env.APP_INTERNAL_TOKEN;
@@ -8,24 +8,29 @@ const appToken = process.env.APP_INTERNAL_TOKEN;
 const validateFirebaseIdToken = async (req, res, next) => {
     let idToken;
 
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        idToken = req.headers.authorization.split('Bearer ')[1];
-    } else {
-        return res.status(httpStatusCodes.forbidden).json({
-            error: 'Unauthorized',
-        });
-    };
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer '))
+        return next(new AuthorizationError('Unauthorized'));
+
+    idToken = req.headers.authorization.split('Bearer ')[1];
 
     try {
         const decodedIdToken = await auth.verifyIdToken(idToken);
-        req.user = decodedIdToken;
-        next();
-        return;
+        req.user = {
+            uid: decodedIdToken.uid,
+            email: decodedIdToken.email || null,
+            name: decodedIdToken.name || null,
+            dni: decodedIdToken.dni || null,
+
+            // claims del provider
+            firebase: decodedIdToken.firebase || {},  
+
+            // por si necesitas revisar claims custom o el token completo
+            raw: decodedIdToken
+        };
+
+        return next();
     } catch (error) {
-        console.error('Error while verifying Firebase ID Token: ', error);
-        return res.status(httpStatusCodes.forbidden).json({
-            error: 'Unauthorized',
-        });
+        return next(error);
     }
 };
 

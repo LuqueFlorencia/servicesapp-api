@@ -1,8 +1,10 @@
-const  { getUserDataId } = require('../../repositories/user.repository');
+const  { getUserDataId, getUidByDni } = require('../../repositories/user.repository');
 
-async function getUserId(userId){
-    const user = await getUserDataId(userId);
+async function getUserByDni(dni) {
+    const uid = await getUidByDni(dni);
+    const user = await getUserDataId(uid);
+
     return user;
-}
+};
 
-module.exports = { getUserId };
+module.exports = { getUserByDni };

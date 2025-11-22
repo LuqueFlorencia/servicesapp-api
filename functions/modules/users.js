@@ -1,61 +1,37 @@
 require('../config/environment');
-
 const express = require('express');
 const cors = require('cors');
 const functions = require('firebase-functions');
 
-const { getSuccessResponseObject, getErrorResponseObject } = require('../src/utils/utils');
-const { httpStatusCodes } = require('../src/utils/httpsStatusCode');
-const { validateBody, validateQuery, errorHandler, asyncHandler, jsonInvalidHandler, notFoundHandler } = require('../src/utils/validate');
+const auth_mw = require('../src/middlewares/auth.middleware');
+const val_mw = require('../src/middlewares/validate.middleware');
+const err_mw = require('../src/middlewares/error.middleware');
 
-const { getUserQuerySchema, updateProfileSchema, createUserRequestSchema } = require('../src/services/user/user.schema');
-const { getUserId, updateMyProfile , createUserData } = require('../src/services/user/user.service');
-const { validateFirebaseIdToken } = require('../src/utils/middleware');
+const schema = require('../src/services/user/user.schema');
+const controller = require('../src/controllers/user.controller');
 
 const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json()); 
 
 /* ===== RUTAS ===== */
-// GET /?userId=...
-app.get('/', 
-    /*validateFirebaseIdToken,*/
-    validateQuery(getUserQuerySchema),
-    asyncHandler(async (req, res) => {
-        const { userId } = req.query;
-        const data = await getUserId(userId);
-        return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
-            data, httpStatusCodes.ok, 'OK', 'Usuario obtenido.'
-        ));
-}));
 
-// PUT /  (actualiza perfil del usuario autenticado)
+// Crear / actualizar usuario completo
 app.put('/', 
-    validateFirebaseIdToken,
-    validateBody(updateProfileSchema),
-    asyncHandler(async (req, res) => {
-        const uid = req.user.uid;
-        const data = await updateMyProfile(uid, req.body);
-        return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
-            data, httpStatusCodes.ok, 'OK', 'Perfil actualizado.'
-        ));
-    })
+    //auth_mw.validateFirebaseIdToken,
+    val_mw.validateBody(schema.userPayloadSchema),
+    err_mw.asyncHandler(controller.upsertUser)
 );
 
-// POST /  (crea perfil users/{uid})
-app.post('/', 
-    /*validateFirebaseIdToken,*/
-    validateBody(createUserRequestSchema),
-    asyncHandler(async (req, res) => {
-        const data = await createUserData(req.body);
-        return res.status(httpStatusCodes.created).json(getSuccessResponseObject(
-            data, httpStatusCodes.created, 'Creado', 'Usuario creado.'
-        ));
-    })
+// Obtener un usuario por uid
+app.get('/:uid', 
+    //auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    err_mw.asyncHandler(controller.getUserById)
 );
 
-app.use(jsonInvalidHandler);
-app.use(notFoundHandler);
-app.use(errorHandler);
+app.use(err_mw.jsonInvalidHandler);
+app.use(err_mw.notFoundHandler);
+app.use(err_mw.errorHandler);
 
 exports.endpoints = functions.https.onRequest(app);

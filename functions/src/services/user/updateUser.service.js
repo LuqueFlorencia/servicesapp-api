@@ -1,7 +1,7 @@
-const { updateMyProfile: repoUpdateMyProfile } = require('../../repositories/user.repository');
+const { updateProfile: repoUpdate } = require('../../repositories/user.repository');
 
 async function updateMyProfile(uid, payload) {
-    const updated = await repoUpdateMyProfile(uid, payload);
+    const updated = await repoUpdate(uid, payload);
     return updated;
 }
 

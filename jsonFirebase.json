@@ -77,10 +77,11 @@
 		}
 	},
 	"users": {
-		"{uid}": {
-			"role": "pro", // puede ser "client" o "pro" de profesional
+		"{firebaseUid}": {
+			"role": "pro",
 			"email": "flor@example.com",
 			"personal": {
+				"dni": "12345678",
 				"displayName": "Florencia",
 				"photoURL": "https://pixabay.com/es/illustrations/ai-generado-mujer-noche-perfil-8958993/",
 				"address": "Sarmiento 100",
@@ -102,5 +103,9 @@
 				"{servicePersonalizeId}": true
 			}
 		}
+	},
+	"dniToUid": {
+		"12345678": "{firebaseUid}",
+		"87654321": "{otroFirebaseUid}"
 	}
 }

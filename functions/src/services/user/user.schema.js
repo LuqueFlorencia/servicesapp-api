@@ -3,6 +3,11 @@ const Joi = require('joi');
 const personalSchema = Joi.object({
     displayName: Joi.string().max(250).required()
         .messages({ 'any.required': 'El nombre es requerido.' }),
+    dni: Joi.string().pattern(/^[0-9]{7,8}$/).required()
+        .messages({
+            'string.pattern.base': 'dni inválido (debe ser numérico de 7 u 8 dígitos).',
+            'any.required': 'dni es requerido.'
+        }),
     photoURL: Joi.string().uri()
         .default('https://cdn.pixabay.com/photo/2016/12/02/16/35/picture-frame-1878069_640.jpg'),
     address: Joi.string().max(250).required()
@@ -40,14 +45,20 @@ const userPayloadSchema = Joi.object({
     services: servicesSchema.optional(),
 }).unknown(false);
 
-const uid = Joi.string().pattern(/^[A-Za-z0-9_-]{6,128}$/).required()
-.messages({
-    'string.pattern.base': 'uid inválido (debe ser alfanumérico con _ o -).',
-    'any.required': 'uid es requerido.'
+const dniScalar = Joi.string()
+    .pattern(/^[0-9]{7,8}$/)
+    .required()
+    .messages({
+        'string.pattern.base': 'uid inválido (debe ser DNI numérico de 7 u 8 dígitos).',
+        'any.required': 'uid es requerido.',
+    });
+
+const uidUserSchema = Joi.object({
+    uid: dniScalar
 });
 
 const getUserQuerySchema = Joi.object({
-    userId: uid.label('userId')
+    uid: dniScalar.label('uid')
 });
 
 const updateProfileSchema = Joi.object({
@@ -56,6 +67,6 @@ const updateProfileSchema = Joi.object({
     services: servicesSchema.optional(),
 }).unknown(false);
 
-const createUserRequestSchema = Joi.object({ uid }).concat(userPayloadSchema);
+const createUserRequestSchema = Joi.object({ uid: uidUserSchema }).concat(userPayloadSchema);
 
-module.exports = { userPayloadSchema, getUserQuerySchema, updateProfileSchema, createUserRequestSchema };
+module.exports = { userPayloadSchema, getUserQuerySchema, updateProfileSchema, createUserRequestSchema, uidUserSchema };

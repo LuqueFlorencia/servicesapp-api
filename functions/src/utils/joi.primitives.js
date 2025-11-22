@@ -12,9 +12,9 @@ const idRef = Joi.alternatives().try(
 // Util para campos opcionalmente nulos o vacío → null
 const nullableString = Joi.alternatives().try(Joi.string(), Joi.allow(null));
 
-// Valida :id en params
-const idParamSchema = Joi.object({
-    id: Joi.number().integer().positive().required()
+// Valida :id en params personalizado y numerico
+const uidParamSchema = Joi.object({
+    uid: Joi.number().integer().positive().required()
     .messages({
         'number.base': 'El identificador debe ser un número entero.',
         'number.integer': 'El identificador debe ser un número entero.',
@@ -23,4 +23,11 @@ const idParamSchema = Joi.object({
     }),
 });
 
-module.exports = { nonEmptyString, idRef, nullableString, idParamSchema };
+// Valida :id en params del autogenerado por firebase
+const firebaseUidParamSchema = Joi.object({
+    uid: Joi.string()
+        .pattern(/^[A-Za-z0-9_-]{6,128}$/)
+        .required()
+});
+
+module.exports = { nonEmptyString, idRef, nullableString, uidParamSchema, firebaseUidParamSchema };
