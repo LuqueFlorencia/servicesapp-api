@@ -1,4 +1,4 @@
-const repo = require('../../repositories/user.repository');
+const repo = require('../../repositories/repositories');
 const { ResourceNotFoundError } = require('../../utils/errores');
 
 // Completar perfil personal tras login (PROPIO USER LOGEADO)

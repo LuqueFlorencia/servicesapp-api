@@ -103,5 +103,5 @@ module.exports = {
     rolePatchSchema,
     listUsersQuerySchema,
     statusPatchSchema,
-    updateProfileSchema,  
+    updateProfileSchema, 
 };

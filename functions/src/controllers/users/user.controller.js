@@ -1,6 +1,8 @@
-const { getSuccessResponseObject } = require('../utils/utils');
-const { httpStatusCodes } = require('../utils/errores');
-const service = require('../services/user.service');
+const { getSuccessResponseObject } = require('../../utils/utils');
+const { httpStatusCodes } = require('../../utils/errores');
+const service = require('../../services/services');
+
+/* ===== CRUD BASICO ===== */
 
 // PATCH /users/me/personal
 async function updateMyPersonalData(req, res) {
@@ -84,5 +86,5 @@ module.exports = {
     updatePersonalData,
     updateUserRole, 
     listUsers,
-    updateUserStatus,
-}
+    updateUserStatus
+};

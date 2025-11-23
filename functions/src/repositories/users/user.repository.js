@@ -1,5 +1,5 @@
-const { db } = require('../utils/firebase');
-const { ResourceNotFoundError } = require('../utils/errores');
+const { db } = require('../../utils/firebase');
+const { ResourceNotFoundError } = require('../../utils/errores');
 
 const USERS_ROOT = 'users';
 const DNI_INDEX_ROOT = 'dniToUid';
