@@ -1,5 +1,5 @@
-const users = require('./users/user.controller');
-const professionals = require('./users/professional.controller');
+const users = require('./user/user.controller');
+const professionals = require('./user/professional.controller');
 
 module.exports = {
     ...users,

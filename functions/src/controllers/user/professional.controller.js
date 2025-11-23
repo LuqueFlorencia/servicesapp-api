@@ -37,8 +37,42 @@ async function listProfessionals(req, res) {
     );
 };
 
+// GET /users/:dni/services
+async function getProfessionalServices(req, res) {
+    const dni = req.params.dni;
+    const data = await service.getProfessionalServices(dni);
+
+    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
+        data, httpStatusCodes.ok, 'OK', 'Servicios del profesional obtenidos.')
+    );
+};
+
+// POST /users/:dni/services
+async function addServiceToProfessional(req, res) {
+    const dni = req.params.dni;
+    const { categoryId, serviceId } = req.body;
+    const data = await service.addServiceToProfessional(dni, categoryId, serviceId);
+
+    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
+        data, httpStatusCodes.ok, 'OK', 'Servicio agregado al profesional.')
+    );
+};
+
+// DELETE /users/:dni/services/:categoryId/:serviceId
+async function removeServiceFromProfessional(req, res) {
+    const { dni, categoryId, serviceId } = req.params;
+    const data = await service.removeServiceFromProfessional(dni, categoryId, serviceId);
+
+    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
+        data, httpStatusCodes.ok, 'OK', 'Servicio removido del profesional.')
+    );
+};
+
 module.exports = { 
     rateProfessional,
     getProfessionalRating,
     listProfessionals,
+    getProfessionalServices,
+    addServiceToProfessional, 
+    removeServiceFromProfessional,
 };

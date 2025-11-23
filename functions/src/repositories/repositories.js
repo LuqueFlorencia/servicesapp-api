@@ -1,5 +1,5 @@
-const users = require('./users/user.repository');
-const professionals = require('./users/professional.repository');
+const users = require('./user/user.repository');
+const professionals = require('./user/professional.repository');
 
 module.exports = {
     ...users,

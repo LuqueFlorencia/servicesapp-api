@@ -3,10 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const functions = require('firebase-functions');
 
-const auth_mw = require('../src/middlewares/auth.middleware');
-const val_mw = require('../src/middlewares/validate.middleware');
-const err_mw = require('../src/middlewares/error.middleware');
-
+const mw = require('../src/middlewares/middlewares');
 const schema = require('../src/validations/schemas');
 const controller = require('../src/controllers/controllers');
 
@@ -15,115 +12,139 @@ app.use(cors({ origin: true }));
 app.use(express.json()); 
 
 // Autenticacion para todas las rutas
-app.use(auth_mw.validateFirebaseIdToken);
+app.use(mw.validateFirebaseIdToken);
 
 /* ===== RUTAS ===== */
 
 /* ===== CRUD BASICO ===== */
 // 1. Completar perfil personal tras login => PROPIO USER
 app.patch('/me/personal',
-    val_mw.validateBody(schema.initialPatchSchema),
-    err_mw.asyncHandler(controller.updateMyPersonalData)
+    mw.validateBody(schema.initialPatchSchema),
+    mw.asyncHandler(controller.updateMyPersonalData)
 );
 
 // 2. Actualizar usuario completo => SOLO ADMIN
 app.put('/:dni', 
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.requireAdmin,
-    val_mw.validateBody(schema.userPayloadSchema),
-    err_mw.asyncHandler(controller.updateUser)
+    mw.validateParams(schema.dniUserSchema),
+    mw.requireAdmin,
+    mw.validateBody(schema.userPayloadSchema),
+    mw.asyncHandler(controller.updateUser)
 );
 
 // 3. Obtener un usuario por dni => PROPIO USER O ADMIN
 app.get('/:dni', 
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.allowSelfOrAdminByDni,
-    err_mw.asyncHandler(controller.getUser)
+    mw.validateParams(schema.dniUserSchema),
+    mw.allowSelfOrAdminByDni,
+    mw.asyncHandler(controller.getUser)
 );
 
-// 4. Actualizar datos personales => SOLO ADMIN
-app.patch('/:dni/personal', 
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.requireAdmin,
-    val_mw.validateBody(schema.personalPatchSchema),
-    err_mw.asyncHandler(controller.updatePersonalData)
-);
-
-// 5. Cambiar rol del usuario => SOLO ADMIN
-app.patch('/:dni/role', 
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.requireAdmin,
-    val_mw.validateBody(schema.rolePatchSchema),
-    err_mw.asyncHandler(controller.updateUserRole)
-);
-
-// 6. Listar usuarios con filtros (role, city, province, active) => SOLO ADMIN
+// 4. Listar usuarios con filtros (role, city, province, active) => SOLO ADMIN
 app.get('/', 
-    auth_mw.requireAdmin,
-    val_mw.validateQuery(schema.listUsersQuerySchema),
-    err_mw.asyncHandler(controller.listUsers)
+    mw.requireAdmin,
+    mw.validateQuery(schema.listUsersQuerySchema),
+    mw.asyncHandler(controller.listUsers)
+);
+
+// 5. Actualizar datos personales => SOLO ADMIN
+app.patch('/:dni/personal', 
+    mw.validateParams(schema.dniUserSchema),
+    mw.requireAdmin,
+    mw.validateBody(schema.personalPatchSchema),
+    mw.asyncHandler(controller.updatePersonalData)
+);
+
+// 6. Cambiar rol del usuario => SOLO ADMIN
+app.patch('/:dni/role', 
+    mw.validateParams(schema.dniUserSchema),
+    mw.requireAdmin,
+    mw.validateBody(schema.rolePatchSchema),
+    mw.asyncHandler(controller.updateUserRole)
 );
 
 // 7. Actualizar estado de actividad de la cuenta (activo/inactivo) => SOLO ADMIN
 app.patch('/:dni/status', 
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.requireAdmin,
-    val_mw.validateBody(schema.statusPatchSchema),
-    err_mw.asyncHandler(controller.updateUserStatus)
-);
-
-/* ===== RATING DE PROFESIONALES ===== */
-
-// 8. Calificar a un profesional => USER AUTENTICADO (no puede ser él mismo)
-app.post('/:dni/rating',
-    val_mw.validateParams(schema.dniUserSchema),
-    val_mw.validateBody(schema.ratingProfessionalSchema),
-    err_mw.asyncHandler(controller.rateProfessional)
-);
-
-// 9. Obtener resumen de rating de un profesional
-app.get('/:dni/rating',
-    val_mw.validateParams(schema.dniUserSchema),
-    err_mw.asyncHandler(controller.getProfessionalRating)
-);
-
-// 10. Listar profesionales con filtros (city, province, minRate, minRateCount, categoryId, serviceId)
-app.get('/professionals', 
-    val_mw.validateQuery(schema.listProfessionalsQuerySchema),
-    err_mw.asyncHandler(controller.listProfessionals)
+    mw.validateParams(schema.dniUserSchema),
+    mw.requireAdmin,
+    mw.validateBody(schema.statusPatchSchema),
+    mw.asyncHandler(controller.updateUserStatus)
 );
 
 /* ===== GESTION DE PLANES PREMIUM ===== */
 
-// 11. Activar o actualizar premium de un usuario => SOLO ADMIN
+// 8. Activar o actualizar premium de un usuario => SOLO ADMIN
 app.put('/:dni/premium',
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.requireAdmin,
-    val_mw.validateBody(schema.premiumSchema),
-    err_mw.asyncHandler(controller.updateUserPremium)
+    mw.validateParams(schema.dniUserSchema),
+    mw.requireAdmin,
+    mw.validateBody(schema.premiumSchema),
+    mw.asyncHandler(controller.updateUserPremium)
 );
 
-// 12. Pausar premium => PROPIO USER O ADMIN
+// 9. Pausar premium => PROPIO USER O ADMIN
 app.patch('/:dni/premium/pause',
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.allowSelfOrAdminByDni,
-    err_mw.asyncHandler(controller.pausePremium)
+    mw.validateParams(schema.dniUserSchema),
+    mw.allowSelfOrAdminByDni,
+    mw.asyncHandler(controller.pausePremium)
 );
 
-// 13. Reanudar premium => PROPIO USER O ADMIN
+// 10. Reanudar premium => PROPIO USER O ADMIN
 app.patch('/:dni/premium/resume',
-    val_mw.validateParams(schema.dniUserSchema),
-    auth_mw.allowSelfOrAdminByDni,
-    err_mw.asyncHandler(controller.resumePremium)
+    mw.validateParams(schema.dniUserSchema),
+    mw.allowSelfOrAdminByDni,
+    mw.asyncHandler(controller.resumePremium)
+);
+
+/* ===== MANEJO DE SERVICIOS OFRECIDOS POR UN PROFESIONAL ===== */
+
+// 11. Listar servicios que ofrece un profesional 
+app.get('/:dni/services',
+    mw.validateParams(schema.dniUserSchema),
+    mw.asyncHandler(controller.getProfessionalServices)
+);
+
+// 12. Agregar un servicio a un profesional 
+app.post('/:dni/services',
+    mw.validateParams(schema.dniUserSchema),
+    mw.allowSelfOrAdminByDni,
+    mw.validateBody(schema.addServiceSchema),
+    mw.asyncHandler(controller.addServiceToProfessional)
+); 
+
+// 13. Quitar un servicio del profesional 
+app.delete('/:dni/services/:categoryId/:serviceId',
+    mw.validateParams(schema.dniUserSchema),
+    mw.validateParams(schema.servicePathParamsSchema),
+    mw.allowSelfOrAdminByDni,
+    mw.asyncHandler(controller.removeServiceFromProfessional)
+);
+
+// 14. Buscar profesionales con filtros (city, province, minRate, minRateCount, categoryId, serviceId)
+app.get('/search/professionals', 
+    mw.validateQuery(schema.listProfessionalsQuerySchema),
+    mw.asyncHandler(controller.listProfessionals)
+);
+
+/* ===== RATING DE PROFESIONALES ===== */
+
+// 15. Calificar a un profesional => USER AUTENTICADO (no puede ser él mismo)
+app.post('/:dni/rating',
+    mw.validateParams(schema.dniUserSchema),
+    mw.validateBody(schema.ratingProfessionalSchema),
+    mw.asyncHandler(controller.rateProfessional)
+);
+
+// 16. Obtener resumen de rating de un profesional
+app.get('/:dni/rating',
+    mw.validateParams(schema.dniUserSchema),
+    mw.asyncHandler(controller.getProfessionalRating)
 );
 
 // JSON inválido
-app.use(err_mw.jsonInvalidHandler);
+app.use(mw.jsonInvalidHandler);
 
 // 404 turas no definidas
-app.use(err_mw.notFoundHandler);
+app.use(mw.notFoundHandler);
 
 // Manejador global de errores
-app.use(err_mw.errorHandler);
+app.use(mw.errorHandler);
 
 exports.endpoints = functions.https.onRequest(app);

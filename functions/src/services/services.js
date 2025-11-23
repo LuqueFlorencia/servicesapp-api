@@ -8,5 +8,4 @@ module.exports = {
     ...updatesUser,
     ...professionals,
     ...premium,
-    ...deletesUser,
 };

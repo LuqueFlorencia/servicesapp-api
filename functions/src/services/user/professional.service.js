@@ -23,11 +23,56 @@ async function getProfessionalRating(dni) {
     return rating;
 };
 
+// Listar servicios de un profesional
+async function getProfessionalServices(dni) {
+    const uid = await repo.getUidByDni(dni);
+    const user = await repo.getUserDataId(uid);
+
+    if (user.role !== 'pro') 
+        throw new DataValidationError('Solo los usuarios con rol "pro" tienen servicios asociados.');
+
+    const services = user.services || {};
+    return { services, id: uid };
+};
+
+// Agregar un servicio existente a un profesional
+async function addServiceToProfessional(dni, categoryId, serviceId) {
+    const uid = await repo.getUidByDni(dni);
+    const user = await repo.getUserDataId(uid);
+
+    if (user.role !== 'pro')
+        throw new DataValidationError('Solo se pueden agregar servicios a usuarios con rol "pro".');
+
+    // Vvalidar que el servicio exista
+    await repo.ensureServiceExists(categoryId, serviceId);
+
+    const updated = await repo.addServiceForPro(uid, categoryId, serviceId);
+    return updated;
+};
+
+// Quitar un servicio del profesional
+async function removeServiceFromProfessional(dni, categoryId, serviceId) {
+    const uid = await repo.getUidByDni(dni);
+    const user = await repo.getUserDataId(uid);
+
+    if (user.role !== 'pro')
+        throw new DataValidationError('Solo se pueden quitar servicios de usuarios con rol "pro".');
+
+    const updated = await repo.removeServiceForPro(uid, categoryId, serviceId);
+    return updated;
+};
+
 // Listar profesionales con filtros -city, province, minRate, minRateCount, categoryId, serviceId-
 async function listProfessionals(filters) {
     const pros = await repo.listProfessionalsRepo(filters);
     return pros;
 };
 
-
-module.exports = { addProfessionalRating, getProfessionalRating, listProfessionals };
+module.exports = { 
+    addProfessionalRating, 
+    getProfessionalRating, 
+    getProfessionalServices,
+    addServiceToProfessional,
+    removeServiceFromProfessional,
+    listProfessionals,
+};

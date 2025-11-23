@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { dniScalar } = require('../joi.primitives');
 
 const personalSchema = Joi.object({
     displayName: Joi.string().max(250).required()
@@ -28,14 +29,6 @@ const servicesSchema = Joi.object().pattern(
     Joi.string().min(1),
     Joi.object().pattern(Joi.string().min(1), Joi.valid(true))
 );
-
-const dniScalar = Joi.string()
-    .pattern(/^[0-9]{7,8}$/)
-    .required()
-    .messages({
-        'string.pattern.base': 'dni inválido (debe ser DNI numérico de 7 u 8 dígitos).',
-        'any.required': 'dni es requerido.',
-    });
 
 const dniUserSchema = Joi.object({
     dni: dniScalar

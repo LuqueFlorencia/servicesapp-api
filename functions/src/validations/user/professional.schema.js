@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { dniScalar } = require('../joi.primitives');
 
 const ratingProfessionalSchema = Joi.object({
     score: Joi.number().min(0).max(10).required()
@@ -18,4 +19,24 @@ const listProfessionalsQuerySchema = Joi.object({
     serviceId: Joi.string().min(1).optional(),
 });
 
-module.exports = { ratingProfessionalSchema, listProfessionalsQuerySchema };
+const addServiceSchema = Joi.object({
+    categoryId: Joi.string().min(1).required()
+        .messages({ 'any.required': 'categoryId es requerido.' }),
+    serviceId: Joi.string().min(1).required()
+        .messages({ 'any.required': 'serviceId es requerido.' }),
+}).required();
+
+const servicePathParamsSchema = Joi.object({
+    dni: dniScalar,
+    categoryId: Joi.string().min(1).required()
+        .messages({ 'any.required': 'categoryId es requerido.' }),
+    serviceId: Joi.string().min(1).required()
+        .messages({ 'any.required': 'serviceId es requerido.' }),
+});
+
+module.exports = { 
+    ratingProfessionalSchema, 
+    listProfessionalsQuerySchema,
+    addServiceSchema,
+    servicePathParamsSchema,
+};

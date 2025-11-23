@@ -2,6 +2,7 @@ const { db } = require('../../utils/firebase');
 const { ResourceNotFoundError } = require('../../utils/errores');
 
 const USERS_ROOT = 'users';
+const SERVICES_ROOT = 'services';
 
 async function addRatingByUid(uid, score) {
     const ref = db.ref(`${USERS_ROOT}/${uid}/personal`);
@@ -36,6 +37,38 @@ async function getRatingByUid(uid) {
         ratingAvg: personal.ratingAvg ?? 0,
         ratingCount: personal.ratingCount ?? 0,
     };
+};
+
+async function ensureServiceExists(categoryId, serviceId) {
+    const ref = db.ref(`${SERVICES_ROOT}/${categoryId}/${serviceId}`);
+    const snap = await ref.once('value');
+    if (!snap.exists())
+        throw new ResourceNotFoundError(`No existe el servicio ${serviceId} en la categoría ${categoryId}.`);
+};
+
+async function addServiceForPro(uid, categoryId, serviceId) {
+    // Realizamos un update multi-path para mantener consistencia
+    const updates = {};
+    updates[`${USERS_ROOT}/${uid}/services/${categoryId}/${serviceId}`] = true;
+    updates[`${SERVICES_ROOT}/${categoryId}/${serviceId}/providers/${uid}`] = true;
+
+    await db.ref().update(updates);
+
+    const userSnap = await db.ref(`${USERS_ROOT}/${uid}`).once('value');
+    const user = userSnap.val() || {};
+    return { ...user, id: uid };
+};
+
+async function removeServiceForPro(uid, categoryId, serviceId) {
+    const updates = {};
+    updates[`${USERS_ROOT}/${uid}/services/${categoryId}/${serviceId}`] = null;
+    updates[`${SERVICES_ROOT}/${categoryId}/${serviceId}/providers/${uid}`] = null;
+
+    await db.ref().update(updates);
+
+    const userSnap = await db.ref(`${USERS_ROOT}/${uid}`).once('value');
+    const user = userSnap.val() || {};
+    return { ...user, id: uid };
 };
 
 async function listProfessionalsRepo(filters) {
@@ -95,5 +128,8 @@ async function listProfessionalsRepo(filters) {
 module.exports = { 
     addRatingByUid,
     getRatingByUid,
+    ensureServiceExists,
+    addServiceForPro,
+    removeServiceForPro,
     listProfessionalsRepo,
 };
