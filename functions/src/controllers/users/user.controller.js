@@ -79,6 +79,37 @@ async function updateUserStatus (req, res) {
     ));
 };
 
+// PUT /users/:dni/premium
+async function updateUserPremium (req, res) {
+    const dni = req.params.dni;
+    const { plan, since } = req.body;
+    const data = await service.activatePremiumByDni(dni, { plan, since });
+
+    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
+        data, httpStatusCodes.ok, 'OK', 'Plan premium actualizado.')
+    );
+};
+
+// PATCH /users/:dni/premium/pause
+async function pausePremium(req, res) {
+    const dni = req.params.dni;
+    const data = await service.setPremiumPausedByDni(dni, true);
+
+    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
+        data, httpStatusCodes.ok, 'OK', 'Plan premium pausado.')
+    );
+};
+
+// PATCH /users/:dni/premium/resume
+async function resumePremium(req, res) {
+    const dni = req.params.dni;
+    const data = await service.setPremiumPausedByDni(dni, false);
+
+    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
+        data, httpStatusCodes.ok, 'OK', 'Plan premium reanudado.')
+    );
+};
+ 
 module.exports = { 
     updateMyPersonalData,
     updateUser,
@@ -86,5 +117,8 @@ module.exports = {
     updatePersonalData,
     updateUserRole, 
     listUsers,
-    updateUserStatus
+    updateUserStatus,
+    updateUserPremium,
+    pausePremium,
+    resumePremium,
 };

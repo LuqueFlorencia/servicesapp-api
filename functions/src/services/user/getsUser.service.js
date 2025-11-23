@@ -14,17 +14,4 @@ async function listUsers(filters) {
     return users;
 };
 
-// Obtener los datos de ranking de un profesional por su dni
-async function getProfessionalRating(dni) {
-    const proUid = await repo.getUidByDni(dni);
-    const rating = await repo.getRatingByUid(proUid);
-    return rating;
-};
-
-// Listar profesionales con filtros -city, province, minRate, minRateCount, categoryId, serviceId-
-async function listProfessionals(filters) {
-    const pros = await repo.listProfessionalsRepo(filters);
-    return pros;
-};
-
-module.exports = { getUserByDni, listUsers, getProfessionalRating, listProfessionals, };
+module.exports = { getUserByDni, listUsers, };

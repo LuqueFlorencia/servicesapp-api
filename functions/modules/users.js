@@ -93,6 +93,30 @@ app.get('/professionals',
     err_mw.asyncHandler(controller.listProfessionals)
 );
 
+/* ===== GESTION DE PLANES PREMIUM ===== */
+
+// 11. Activar o actualizar premium de un usuario => SOLO ADMIN
+app.put('/:dni/premium',
+    val_mw.validateParams(schema.dniUserSchema),
+    auth_mw.requireAdmin,
+    val_mw.validateBody(schema.premiumSchema),
+    err_mw.asyncHandler(controller.updateUserPremium)
+);
+
+// 12. Pausar premium => PROPIO USER O ADMIN
+app.patch('/:dni/premium/pause',
+    val_mw.validateParams(schema.dniUserSchema),
+    auth_mw.allowSelfOrAdminByDni,
+    err_mw.asyncHandler(controller.pausePremium)
+);
+
+// 13. Reanudar premium => PROPIO USER O ADMIN
+app.patch('/:dni/premium/resume',
+    val_mw.validateParams(schema.dniUserSchema),
+    auth_mw.allowSelfOrAdminByDni,
+    err_mw.asyncHandler(controller.resumePremium)
+);
+
 // JSON inválido
 app.use(err_mw.jsonInvalidHandler);
 

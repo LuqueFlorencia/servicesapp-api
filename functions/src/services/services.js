@@ -1,11 +1,12 @@
 const getsUser = require('./user/getsUser.service');
 const updatesUser = require('./user/updatesUser.service');
-const postsUser = require('./user/postsUser.service');
-const deletesUser = require('./user/deletesUser.service');
+const professionals = require('./user/professional.service');
+const premium = require('./user/premium.service');
 
 module.exports = { 
     ...getsUser,
     ...updatesUser,
-    ...postsUser,
+    ...professionals,
+    ...premium,
     ...deletesUser,
 };

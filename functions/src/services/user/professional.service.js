@@ -16,4 +16,18 @@ async function addProfessionalRating(dni, score, raterUid) {
     return updatedUser;
 };
 
-module.exports = { addProfessionalRating };
+// Obtener los datos de ranking de un profesional por su dni
+async function getProfessionalRating(dni) {
+    const proUid = await repo.getUidByDni(dni);
+    const rating = await repo.getRatingByUid(proUid);
+    return rating;
+};
+
+// Listar profesionales con filtros -city, province, minRate, minRateCount, categoryId, serviceId-
+async function listProfessionals(filters) {
+    const pros = await repo.listProfessionalsRepo(filters);
+    return pros;
+};
+
+
+module.exports = { addProfessionalRating, getProfessionalRating, listProfessionals };

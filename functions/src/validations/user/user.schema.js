@@ -19,10 +19,8 @@ const personalSchema = Joi.object({
 
 const premiumSchema = Joi.object({
     plan: Joi.string().valid('standard', 'plus').required()
-        .messages({ 'any.only': 'plan debe ser standard o plus.' }),
-    active: Joi.boolean().required(),
-    paused: Joi.boolean().required(),
-    since: Joi.number().integer().min(0).allow(null).required()
+        .messages({ 'any.only': 'plan debe ser "standard" o "plus".' }),
+    since: Joi.number().integer().min(0).allow(null).optional()
         .messages({ 'number.base': 'since debe ser un entero (timestamp ms).' }),
 }).required();
 
@@ -89,19 +87,13 @@ const statusPatchSchema = Joi.object({
         .messages({ 'any.required': 'is_deleted es requerido.' })
 });
 
-const updateProfileSchema = Joi.object({
-    personal: personalSchema,
-    premium: premiumSchema.optional(),
-    services: servicesSchema.optional(),
-});
-
 module.exports = { 
     dniUserSchema,
+    premiumSchema,
     userPayloadSchema, 
     initialPatchSchema,
     personalPatchSchema,
     rolePatchSchema,
     listUsersQuerySchema,
     statusPatchSchema,
-    updateProfileSchema, 
 };
