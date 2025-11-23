@@ -1,7 +1,8 @@
 {
   "scripts": {
     "emu:functions": "firebase emulators:start --only functions",
-    "emu:fad": "firebase emulators:start --only functions,auth",
+    "emu:fa": "firebase emulators:start --only functions,auth",
+    "emu:dev": "firebase emulators:start --only functions,auth,database",
     "emu:all": "firebase emulators:start",
     "deploy:functions": "firebase deploy --only functions",
     "logs": "firebase functions:log",

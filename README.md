@@ -50,7 +50,10 @@ La URL del RTDB ya es la del proyecto oficial, no la cambies.
 Para correr las funciones y probar la conexión al RTDB:
   ``` bash
   ## Inicialmente solo se necesita functions
-  firebase emulators:start --only functions, database, auth
+  firebase emulators:start --only functions
+
+  ## Mas adelante se necesitan las funciones de: functions, auth y database
+  firebase emulators:start --only functions,auth,database
   ```
 
 Esto levantará:
@@ -59,7 +62,8 @@ Esto levantará:
 * Auth → http://localhost:9099
 * Emulator UI → http://localhost:4000
 
-El proyecto está preparado para detectar automáticamente los emuladores (no se requiere configuración extra).
+El proyecto está preparado para detectar automáticamente los emuladores.
+Para `database` es necesario tener instalado el JDK de Java 11 o 17 y agregado al PATH.
 
 
 ## 📁 Estructura del proyecto
@@ -71,20 +75,32 @@ functions/
 ├── permissions/
 │   └── *adminsdk*.json     # credenciales (local)
 ├── src/
+│   ├── controllers/
+│   │   └── entity.controller.js
+│   ├── middlewares/
+│   │   └── auth.middleware.js
+│   │   └── error.middleware.js
+│   │   └── validate.middleware.js
 │   ├── repositories/
 │   │   └── entity.repository.js
 │   ├── services/
-│   │   └── entity/
-│   │       ├── createEntity.service.js
-│   │       ├── getEntity.service.js
-│   │       ├── updateEntity.service.js
-│   │       └── deleteEntity.service.js
-│   └── utils/
-│       ├── firebase.js
-│       ├── httpsStatusCode.js
-│       ├── middleware.js
-│       └── utils.js
-├── index.js
-├── .env
-└── firebase.json
+│   │   │── entity/
+│   │   │   ├── createEntity.service.js
+│   │   │   ├── getEntity.service.js
+│   │   │   ├── updateEntity.service.js
+│   │   │   └── deleteEntity.service.js
+│   │   └── entity.service.js
+│   │── utils/
+│   │   ├── firebase.js
+│   │   ├── errores.js
+│   │   ├── joi.primitives.js
+│   │   └── utils.js
+|   ├── index.js
+|   ├── .env
+|   ├── .env.dev
+|   ├── package.json
+|── firebase.json
+|── database.rules.json
+|── jsonFirebase.json
+└── package.json
 ```

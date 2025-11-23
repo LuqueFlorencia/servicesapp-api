@@ -1,61 +1,82 @@
 require('../config/environment');
-
 const express = require('express');
 const cors = require('cors');
 const functions = require('firebase-functions');
 
-const { getSuccessResponseObject, getErrorResponseObject } = require('../src/utils/utils');
-const { httpStatusCodes } = require('../src/utils/httpsStatusCode');
-const { validateBody, validateQuery, errorHandler, asyncHandler, jsonInvalidHandler, notFoundHandler } = require('../src/utils/validate');
+const auth_mw = require('../src/middlewares/auth.middleware');
+const val_mw = require('../src/middlewares/validate.middleware');
+const err_mw = require('../src/middlewares/error.middleware');
 
-const { getUserQuerySchema, updateProfileSchema, createUserRequestSchema } = require('../src/services/user/user.schema');
-const { getUserId, updateMyProfile , createUserData } = require('../src/services/user/user.service');
-const { validateFirebaseIdToken } = require('../src/utils/middleware');
+const schema = require('../src/services/user/user.schema');
+const controller = require('../src/controllers/user.controller');
 
 const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json()); 
 
 /* ===== RUTAS ===== */
-// GET /?userId=...
+
+// Completar perfil personal tras login => PROPIO USER
+app.patch('/me/personal',
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateBody(schema.initialPatchSchema),
+    err_mw.asyncHandler(controller.updateMyPersonalData)
+);
+
+// Actualizar usuario completo  => SOLO ADMIN
+app.put('/:uid', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.requireAdmin,
+    val_mw.validateBody(schema.userPayloadSchema),
+    err_mw.asyncHandler(controller.updateUser)
+);
+
+// Obtener un usuario por uid => PROPIO USER O ADMIN
+app.get('/:uid', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.allowSelfOrAdminByDni,
+    err_mw.asyncHandler(controller.getUser)
+);
+
+// Actualizar datos personales  => PROPIO USER O ADMIN
+app.patch('/:uid/personal', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.allowSelfOrAdminByDni,
+    val_mw.validateBody(schema.personalPatchSchema),
+    err_mw.asyncHandler(controller.updatePersonalData)
+);
+
+// Cambiar rol del usuario  => SOLO ADMIN
+app.patch('/:uid/role', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.requireAdmin,
+    val_mw.validateBody(schema.rolePatchSchema),
+    err_mw.asyncHandler(controller.updateUserRole)
+);
+
+// Listar usuarios con filtros (role, city, province)  => SOLO ADMIN
 app.get('/', 
-    /*validateFirebaseIdToken,*/
-    validateQuery(getUserQuerySchema),
-    asyncHandler(async (req, res) => {
-        const { userId } = req.query;
-        const data = await getUserId(userId);
-        return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
-            data, httpStatusCodes.ok, 'OK', 'Usuario obtenido.'
-        ));
-}));
-
-// PUT /  (actualiza perfil del usuario autenticado)
-app.put('/', 
-    validateFirebaseIdToken,
-    validateBody(updateProfileSchema),
-    asyncHandler(async (req, res) => {
-        const uid = req.user.uid;
-        const data = await updateMyProfile(uid, req.body);
-        return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
-            data, httpStatusCodes.ok, 'OK', 'Perfil actualizado.'
-        ));
-    })
+    auth_mw.validateFirebaseIdToken,
+    auth_mw.requireAdmin,
+    val_mw.validateQuery(schema.listUsersQuerySchema),
+    err_mw.asyncHandler(controller.listUsers)
 );
 
-// POST /  (crea perfil users/{uid})
-app.post('/', 
-    /*validateFirebaseIdToken,*/
-    validateBody(createUserRequestSchema),
-    asyncHandler(async (req, res) => {
-        const data = await createUserData(req.body);
-        return res.status(httpStatusCodes.created).json(getSuccessResponseObject(
-            data, httpStatusCodes.created, 'Creado', 'Usuario creado.'
-        ));
-    })
+// Actualizar estado de actividad de la cuenta (activo/inactivo) => SOLO ADMIN
+app.patch('/:uid/status', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.requireAdmin,
+    val_mw.validateBody(schema.statusPatchSchema),
+    err_mw.asyncHandler(controller.updateUserStatus)
 );
 
-app.use(jsonInvalidHandler);
-app.use(notFoundHandler);
-app.use(errorHandler);
+app.use(err_mw.jsonInvalidHandler);
+app.use(err_mw.notFoundHandler);
+app.use(err_mw.errorHandler);
 
 exports.endpoints = functions.https.onRequest(app);

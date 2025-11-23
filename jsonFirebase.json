@@ -77,10 +77,12 @@
 		}
 	},
 	"users": {
-		"{uid}": {
-			"role": "pro", // puede ser "client" o "pro" de profesional
+		"{firebaseUid}": {
+			"is_deleted": false,
+			"role": "pro",
 			"email": "flor@example.com",
 			"personal": {
+				"dni": "12345678",
 				"displayName": "Florencia",
 				"photoURL": "https://pixabay.com/es/illustrations/ai-generado-mujer-noche-perfil-8958993/",
 				"address": "Sarmiento 100",
@@ -94,13 +96,17 @@
 				"plan": "standard", 
 				"paused": false, 
 				"since": 1730332800000 
+			},
+			"services": {
+				"{categoryId}": {
+					"{serviceId}": true,
+					"{servicePersonalizeId}": true
+				}
 			}
 		},
-		"services": {
-			"{categoryId}": {
-				"{serviceId}": true,
-				"{servicePersonalizeId}": true
-			}
+		"dniToUid": {
+			"12345678": "{firebaseUid}",
+			"87654321": "{otroFirebaseUid}"
 		}
 	}
 }
