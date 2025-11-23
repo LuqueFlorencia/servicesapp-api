@@ -12,20 +12,6 @@ class BadRequestError extends Error {
     };
 };
 
-class NotFoundError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'NotFoundError';
-    };
-};
-
-class DatabaseError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'DatabaseError';
-    };
-};
-
 class AuthorizationError extends Error {
     constructor(message) {
         super(message);
@@ -33,10 +19,31 @@ class AuthorizationError extends Error {
     };
 };
 
+class ForbiddenError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'ForbiddenError';
+    };
+};
+
+class NotFoundError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'NotFoundError';
+    };
+};
+
 class ResourceNotFoundError extends Error {
     constructor(message) {
         super(message);
         this.name = 'ResourceNotFoundError';
+    };
+};
+
+class DatabaseError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'DatabaseError';
     };
 };
 
@@ -58,8 +65,9 @@ module.exports = {
     httpStatusCodes, 
     DataValidationError, 
     BadRequestError,
-    NotFoundError,
-    DatabaseError, 
     AuthorizationError, 
-    ResourceNotFoundError 
+    ForbiddenError,
+    NotFoundError,
+    ResourceNotFoundError,
+    DatabaseError, 
 };

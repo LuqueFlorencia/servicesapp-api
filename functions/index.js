@@ -13,6 +13,7 @@ exports.onAuthCreateProfile = functions.auth.user().onCreate(async (user) => {
         email,
         personal: {
             displayName: user.displayName ?? '',
+            dni: user.dni ?? '',
             photoURL: user.photoURL ?? '',
             address: '',
             city: '',

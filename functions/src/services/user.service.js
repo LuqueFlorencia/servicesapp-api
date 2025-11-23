@@ -1,9 +1,7 @@
-const updateMyProfile = require('./updateUser.service');
-const getUserByDni = require('./getUser.service');
-const createUserData = require('./createUser.service');
+const updates = require('../services/user/updatesUser.service');
+const gets = require('../services/user/getsUser.service');
 
 module.exports = { 
-    ...updateMyProfile,
-    ...getUserByDni,
-    ...createUserData,
+    ...updates,
+    ...gets,
 };

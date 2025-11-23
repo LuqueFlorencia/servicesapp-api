@@ -16,18 +16,56 @@ app.use(express.json());
 
 /* ===== RUTAS ===== */
 
-// Crear / actualizar usuario completo
-app.put('/', 
-    //auth_mw.validateFirebaseIdToken,
+// Crear / actualizar usuario completo  => SOLO ADMIN
+app.put('/:uid', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.requireAdmin,
     val_mw.validateBody(schema.userPayloadSchema),
     err_mw.asyncHandler(controller.upsertUser)
 );
 
-// Obtener un usuario por uid
+// Obtener un usuario por uid => PROPIO USER O ADMIN
 app.get('/:uid', 
-    //auth_mw.validateFirebaseIdToken,
+    auth_mw.validateFirebaseIdToken,
     val_mw.validateParams(schema.uidUserSchema),
-    err_mw.asyncHandler(controller.getUserById)
+    auth_mw.allowSelfOrAdminByDni,
+    err_mw.asyncHandler(controller.getUser)
+);
+
+// Actualizar datos personales  => PROPIO USER O ADMIN
+app.patch('/:uid/personal', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.allowSelfOrAdminByDni,
+    val_mw.validateBody(schema.personalPatchSchema),
+    err_mw.asyncHandler(controller.updatePersonalData)
+);
+
+// Cambiar rol del usuario  => SOLO ADMIN
+app.patch('/:uid/role', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.requireAdmin,
+    val_mw.validateBody(schema.rolePatchSchema),
+    err_mw.asyncHandler(controller.updateUserRole)
+);
+
+// Listar usuarios con filtros (role, city, province)  => SOLO ADMIN
+app.get('/', 
+    auth_mw.validateFirebaseIdToken,
+    auth_mw.requireAdmin,
+    val_mw.validateQuery(schema.listUsersQuerySchema),
+    err_mw.asyncHandler(controller.listUsers)
+);
+
+// Actualizar estado de actividad de la cuenta (activo/inactivo) => SOLO ADMIN
+app.patch('/:uid/status', 
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateParams(schema.uidUserSchema),
+    auth_mw.requireAdmin,
+    val_mw.validateBody(schema.statusPatchSchema),
+    err_mw.asyncHandler(controller.updateUserStatus)
 );
 
 app.use(err_mw.jsonInvalidHandler);

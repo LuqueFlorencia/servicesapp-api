@@ -1,9 +1,9 @@
 const { getErrorResponseObject } = require('../utils/utils');
-const { httpStatusCodes } = require('../utils/httpsStatusCode');
+const { httpStatusCodes, ResourceNotFoundError } = require('../utils/errores');
 
 // ===== HANDLER GLOBAL DE ERRORES =====
 function errorHandler(err, _req, res, _next) {
-    const errorResponse = getErrorResponseObject(err, 'Algo salio mal.');
+    const errorResponse = getErrorResponseObject(err);
     return res.status(errorResponse.status).json(errorResponse);
 };
 

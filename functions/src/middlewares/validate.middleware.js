@@ -1,4 +1,4 @@
-const { DataValidationError } = require('../utils/httpsStatusCode');
+const { DataValidationError } = require('../utils/errores');
 
 const defaultOptions = {
     abortEarly: false,     // acumula todos los errores

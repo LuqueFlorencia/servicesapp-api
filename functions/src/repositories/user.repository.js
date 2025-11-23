@@ -1,17 +1,18 @@
 const { db } = require('../utils/firebase');
-const { ResourceNotFoundError } = require('../utils/httpsStatusCode');
+const { ResourceNotFoundError } = require('../utils/errores');
 
 const USERS_ROOT = 'users';
 const DNI_INDEX_ROOT = 'dniToUid';
 
-async function updateProfile(uid, payload) {
+async function updateProfileByUid(uid, payload) {
     const ref = db.ref(`${USERS_ROOT}/${uid}`);
+
+    // Upsert: si no existe, lo crea; si existe, hace merge
     await ref.update(payload);
+
     const snapshot = await ref.once('value');
-
-    const user = snapshot.val();
-    if (!user) throw new ResourceNotFoundError(`No se encontró el usuario con uid = ${uid}.`);
-
+    const user = snapshot.val() || {};
+    
     const dni = payload.personal?.dni || user.personal?.dni;
     if (dni) await linkDniToUid(dni, uid);
 
@@ -43,17 +44,76 @@ async function getUidByDni(dni) {
     return uid;
 };
 
-async function createUserDatabase(uid, payload) {
+async function updatePersonalByUid(uid, personalData) {
     const ref = db.ref(`${USERS_ROOT}/${uid}`);
-    await ref.set(payload);
     const snapshot = await ref.once('value');
-    return { ...snapshot.val(), id: uid };
+
+    const user = snapshot.val();
+    if (!user) throw new ResourceNotFoundError(`No se encontró el usuario con uid = ${uid}.`);
+
+    const personalRef = ref.child('personal');
+    await personalRef.update(personalData);
+
+    const updatedSnap = await ref.once('value');
+    const updatedUser = updatedSnap.val();
+
+    return { ...updatedUser, id: uid };
+};
+
+async function updateRoleByUid(uid, role) {
+    const ref = db.ref(`${USERS_ROOT}/${uid}`);
+    const snapshot = await ref.once('value');
+
+    const user = snapshot.val();
+    if (!user) throw new ResourceNotFoundError(`No se encontró el usuario con uid = ${uid}.`);
+
+    await ref.child('role').set(role);
+
+    const updatedSnap = await ref.once('value');
+    const updatedUser = updatedSnap.val();
+
+    return { ...updatedUser, id: uid };
+};
+
+async function listUsersRepo({ role, city, province, active }) {
+    const snapshot = await db.ref(USERS_ROOT).once('value');
+    const usersObj = snapshot.val() || {};
+
+    const result = Object.entries(usersObj)
+        .map(([uid, user]) => ({ ...user, id: uid }))
+        .filter(u => {
+            if (role && u.role !== role) return false;
+            if (typeof active === 'boolean' && u.is_deleted !== active) return false;
+            if (city && (!u.personal || u.personal.city !== city)) return false;
+            if (province && (!u.personal || u.personal.province !== province)) return false;
+            return true;
+        });
+
+    return result;
+};
+
+async function updateStatusByUid(uid, is_deleted) {
+    const userRef = db.ref(`${USERS_ROOT}/${uid}`);
+    const snapshot = await userRef.once('value');
+
+    const user = snapshot.val();
+    if (!user) throw new ResourceNotFoundError(`No se encontró el usuario con uid = ${uid}.`);
+
+    await userRef.child('is_deleted').set(is_deleted);
+
+    const updatedSnap = await userRef.once('value');
+    const updatedUser = updatedSnap.val();
+
+    return { ...updatedUser, id: uid };
 };
 
 module.exports = { 
-    updateProfile,
+    updateProfileByUid,
     linkDniToUid,
     getUserDataId,
     getUidByDni,
-    createUserDatabase, 
+    updatePersonalByUid,
+    updateRoleByUid,
+    listUsersRepo,
+    updateStatusByUid,
 };

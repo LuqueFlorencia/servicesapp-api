@@ -78,6 +78,7 @@
 	},
 	"users": {
 		"{firebaseUid}": {
+			"status": true,
 			"role": "pro",
 			"email": "flor@example.com",
 			"personal": {
@@ -95,17 +96,17 @@
 				"plan": "standard", 
 				"paused": false, 
 				"since": 1730332800000 
+			},
+			"services": {
+				"{categoryId}": {
+					"{serviceId}": true,
+					"{servicePersonalizeId}": true
+				}
 			}
 		},
-		"services": {
-			"{categoryId}": {
-				"{serviceId}": true,
-				"{servicePersonalizeId}": true
-			}
+		"dniToUid": {
+			"12345678": "{firebaseUid}",
+			"87654321": "{otroFirebaseUid}"
 		}
-	},
-	"dniToUid": {
-		"12345678": "{firebaseUid}",
-		"87654321": "{otroFirebaseUid}"
 	}
 }

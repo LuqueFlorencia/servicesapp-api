@@ -1,4 +1,4 @@
-const { httpStatusCodes, DataValidationError, DatabaseError, AuthorizationError, ResourceNotFoundError } = require('./httpsStatusCode');
+const util = require('./errores');
 
 function getDateNow() {
     const today = new Date();
@@ -18,25 +18,27 @@ function getSuccessResponseObject(payload, statusCode, title, message){
     };
 };
 
-function getErrorResponseObject(error, message){
+function getErrorResponseObject(error, message = 'Algo salio mal.'){
     const response = {};
     console.log('ERROR ', error);
 
-    if (error instanceof AuthorizationError)
-        response.status = httpStatusCodes.unauthorized;
-    else if (error instanceof DataValidationError)
-        response.status = httpStatusCodes.badRequest;
-    else if (error instanceof DatabaseError)
-        response.status = httpStatusCodes.internalServerError;
-    else if (error instanceof ResourceNotFoundError)
-        response.status = httpStatusCodes.notFound;
-    else if (error && typeof error.code === 'string' && error.code.startsWith('auth/'))
-        response.status = httpStatusCodes.unauthorized;
+    if (error instanceof util.DataValidationError || error instanceof util.BadRequestError)
+        response.status = util.httpStatusCodes.badRequest;
+    else if (error instanceof util.AuthorizationError)
+        response.status = util.httpStatusCodes.unauthorized;
+    else if (error instanceof util.ForbiddenError)
+        response.status = util.httpStatusCodes.forbidden;
+    else if (error instanceof util.NotFoundError || error instanceof util.ResourceNotFoundError)
+        response.status = util.httpStatusCodes.notFound;
+    else if (error instanceof util.DatabaseError)
+        response.status = util.httpStatusCodes.internalServerError;
+    else if (error && typeof util.code === 'string' && error.code.startsWith('auth/'))
+        response.status = util.httpStatusCodes.unauthorized;
     else
-        response.status = httpStatusCodes.internalServerError;
+        response.status = util.httpStatusCodes.internalServerError;
 
-    response.message = message;
-    response.title = error.message || error.code || error;
+    response.message = error.message || message;
+    response.title = error.name || error.code || error;
 
     return response;
 };
