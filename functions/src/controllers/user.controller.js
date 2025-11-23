@@ -2,10 +2,22 @@ const { getSuccessResponseObject } = require('../utils/utils');
 const { httpStatusCodes } = require('../utils/errores');
 const service = require('../services/user.service');
 
+// PATCH /users/me/personal
+async function updateMyPersonalData(req, res) {
+    const uid = req.user.uid;
+    const personal = req.body;
+
+    const data = await service.updatePersonalProfile(uid, { personal });
+
+    return res.status(httpStatusCodes.ok).json(
+        getSuccessResponseObject(data, httpStatusCodes.ok, 'OK', 'Perfil actualizado.')
+    );
+};
+
 // PUT /users/:uid
-async function upsertUser (req, res) {
+async function updateUser (req, res) {
     const dni = req.params.uid;
-    const data = await service.updateProfileByDni(dni, req.body);
+    const data = await service.updateExistingUserByDni(dni, req.body);
 
     return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
         data, httpStatusCodes.ok, 'OK', 'Perfil actualizado.'
@@ -66,7 +78,8 @@ async function updateUserStatus (req, res) {
 };
 
 module.exports = { 
-    upsertUser,
+    updateMyPersonalData,
+    updateUser,
     getUser,
     updatePersonalData,
     updateUserRole, 

@@ -78,7 +78,7 @@
 	},
 	"users": {
 		"{firebaseUid}": {
-			"status": true,
+			"is_deleted": false,
 			"role": "pro",
 			"email": "flor@example.com",
 			"personal": {

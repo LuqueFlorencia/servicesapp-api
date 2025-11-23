@@ -35,8 +35,8 @@ const dniScalar = Joi.string()
     .pattern(/^[0-9]{7,8}$/)
     .required()
     .messages({
-        'string.pattern.base': 'uid inválido (debe ser DNI numérico de 7 u 8 dígitos).',
-        'any.required': 'uid es requerido.',
+        'string.pattern.base': 'dni inválido (debe ser DNI numérico de 7 u 8 dígitos).',
+        'any.required': 'dni es requerido.',
     });
 
 const uidUserSchema = Joi.object({
@@ -51,7 +51,18 @@ const userPayloadSchema = Joi.object({
     personal: personalSchema,
     premium: premiumSchema,
     services: servicesSchema.optional(),
+    ratingAvg: Joi.number().min(0).max(10).precision(2),
+    ratingCount: Joi.number().integer().min(0),
 });
+
+const initialPatchSchema = Joi.object({
+    displayName: Joi.string().max(250),
+    dni: dniScalar,
+    photoURL: Joi.string().uri(),
+    address: Joi.string().max(250),
+    city: Joi.string().max(120),
+    province: Joi.string().max(120)
+}).min(1);
 
 const personalPatchSchema = Joi.object({
     displayName: Joi.string().max(250),
@@ -78,7 +89,6 @@ const statusPatchSchema = Joi.object({
         .messages({ 'any.required': 'is_deleted es requerido.' })
 });
 
-
 const updateProfileSchema = Joi.object({
     personal: personalSchema,
     premium: premiumSchema.optional(),
@@ -88,6 +98,7 @@ const updateProfileSchema = Joi.object({
 module.exports = { 
     uidUserSchema,
     userPayloadSchema, 
+    initialPatchSchema,
     personalPatchSchema,
     rolePatchSchema,
     listUsersQuerySchema,

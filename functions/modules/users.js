@@ -16,13 +16,20 @@ app.use(express.json());
 
 /* ===== RUTAS ===== */
 
-// Crear / actualizar usuario completo  => SOLO ADMIN
+// Completar perfil personal tras login => PROPIO USER
+app.patch('/me/personal',
+    auth_mw.validateFirebaseIdToken,
+    val_mw.validateBody(schema.initialPatchSchema),
+    err_mw.asyncHandler(controller.updateMyPersonalData)
+);
+
+// Actualizar usuario completo  => SOLO ADMIN
 app.put('/:uid', 
     auth_mw.validateFirebaseIdToken,
     val_mw.validateParams(schema.uidUserSchema),
     auth_mw.requireAdmin,
     val_mw.validateBody(schema.userPayloadSchema),
-    err_mw.asyncHandler(controller.upsertUser)
+    err_mw.asyncHandler(controller.updateUser)
 );
 
 // Obtener un usuario por uid => PROPIO USER O ADMIN
