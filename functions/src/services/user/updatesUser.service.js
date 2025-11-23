@@ -1,6 +1,7 @@
 const repo = require('../../repositories/user.repository');
 const { ResourceNotFoundError } = require('../../utils/errores');
 
+// Completar perfil personal tras login (PROPIO USER LOGEADO)
 async function updatePersonalProfile(uid, personalPayload) {   
     let existingUser = null;
     let role = 'client'; 
@@ -23,6 +24,7 @@ async function updatePersonalProfile(uid, personalPayload) {
     return updatedUser;
 };
 
+// Actualizar usuario completo (SOLO ADMIN)
 async function updateExistingUserByDni(dni, payload) {
     const uid = await repo.getUidByDni(dni);
     await repo.getUserDataId(uid);
@@ -34,18 +36,21 @@ async function updateExistingUserByDni(dni, payload) {
     return updated;
 };
 
+// Actualizar datos personales
 async function updatePersonalByDni(dni, personalData) {
     const uid = await repo.getUidByDni(dni);
     const user = await repo.updatePersonalByUid(uid, personalData);
     return user;
 };
 
+// Cambiar rol del usuario (SOLO ADMIN)
 async function updateRoleByDni(dni, role) {
     const uid = await repo.getUidByDni(dni);
     const user = await repo.updateRoleByUid(uid, role);
     return user;
 };
 
+// Actualizar estado de actividad de la cuenta -activo/inactivo- (SOLO ADMIN)
 async function updateStatusByDni(dni, is_deleted) {
     const uid = await repo.getUidByDni(dni);
     const user = await repo.updateStatusByUid(uid, is_deleted);

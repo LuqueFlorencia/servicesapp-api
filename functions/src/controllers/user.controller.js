@@ -14,9 +14,9 @@ async function updateMyPersonalData(req, res) {
     );
 };
 
-// PUT /users/:uid
+// PUT /users/:dni
 async function updateUser (req, res) {
-    const dni = req.params.uid;
+    const dni = req.params.dni;
     const data = await service.updateExistingUserByDni(dni, req.body);
 
     return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
@@ -24,9 +24,9 @@ async function updateUser (req, res) {
     ));
 };
 
-// GET /users/:uid
+// GET /users/:dni
 async function getUser (req, res) {
-    const dni = req.params.uid;
+    const dni = req.params.dni;
     const data = await service.getUserByDni(dni);
 
     return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
@@ -34,9 +34,9 @@ async function getUser (req, res) {
     ));
 };
 
-// PATCH /users/:uid/personal
+// PATCH /users/:dni/personal
 async function updatePersonalData (req, res) {
-    const dni = req.params.uid;
+    const dni = req.params.dni;
     const personalData = req.body;
     const data = await service.updatePersonalByDni(dni, personalData);
 
@@ -45,9 +45,9 @@ async function updatePersonalData (req, res) {
     ));
 };
 
-// PATCH /users/:uid/role
+// PATCH /users/:dni/role
 async function updateUserRole (req, res) {
-    const dni = req.params.uid;
+    const dni = req.params.dni;
     const { role } = req.body;
     const data = await service.updateRoleByDni(dni, role);
 
@@ -56,7 +56,7 @@ async function updateUserRole (req, res) {
     ));
 };
 
-// GET /users ~ Filtros opcionales: ?role=pro&city=Resistencia&province=Chaco
+// GET /users ~ Filtros opcionales: ?role=pro&city=Resistencia&province=Chaco&active=true
 async function listUsers (req, res) {
     const filters = req.query;
     const data = await service.listUsers(filters);
@@ -66,9 +66,9 @@ async function listUsers (req, res) {
     ));
 };
 
-// PATCH /users/:uid/status
+// PATCH /users/:dni/status
 async function updateUserStatus (req, res) {
-    const dni = req.params.uid;
+    const dni = req.params.dni;
     const { is_deleted } = req.body;
     const data = await service.updateStatusByDni(dni, is_deleted);
 

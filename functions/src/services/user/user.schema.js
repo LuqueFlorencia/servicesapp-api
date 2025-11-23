@@ -39,8 +39,8 @@ const dniScalar = Joi.string()
         'any.required': 'dni es requerido.',
     });
 
-const uidUserSchema = Joi.object({
-    uid: dniScalar
+const dniUserSchema = Joi.object({
+    dni: dniScalar
 });
 
 const userPayloadSchema = Joi.object({
@@ -96,7 +96,7 @@ const updateProfileSchema = Joi.object({
 });
 
 module.exports = { 
-    uidUserSchema,
+    dniUserSchema,
     userPayloadSchema, 
     initialPatchSchema,
     personalPatchSchema,
