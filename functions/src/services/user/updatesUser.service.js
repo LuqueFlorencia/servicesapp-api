@@ -13,14 +13,12 @@ async function updatePersonalProfile(uid, personalPayload) {
         if (!(err instanceof ResourceNotFoundError)) throw err;
     }
 
-    if (user.role === 'pro') {
+    if (role === 'pro') {
         if (personalPayload.personal.ratingAvg === undefined) personalPayload.personal.ratingAvg = 0;
         if (personalPayload.personal.ratingCount === undefined) personalPayload.personal.ratingCount = 0;
     };
 
-    const payload = { personal: personalPayload };
-
-    const updatedUser = await repo.updateProfileByUid(uid, payload);
+    const updatedUser = await repo.updateProfileByUid(uid, personalPayload);
     return updatedUser;
 };
 
@@ -34,13 +32,6 @@ async function updateExistingUserByDni(dni, payload) {
 
     const updated = await repo.updateProfileByUid(uid, payload);
     return updated;
-};
-
-// Actualizar datos personales
-async function updatePersonalByDni(dni, personalData) {
-    const uid = await repo.getUidByDni(dni);
-    const user = await repo.updatePersonalByUid(uid, personalData);
-    return user;
 };
 
 // Cambiar rol del usuario (SOLO ADMIN)
@@ -60,7 +51,6 @@ async function updateStatusByDni(dni, is_deleted) {
 module.exports = { 
     updatePersonalProfile,
     updateExistingUserByDni,
-    updatePersonalByDni, 
     updateRoleByDni,
     updateStatusByDni,
 };

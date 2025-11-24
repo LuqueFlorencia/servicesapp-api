@@ -76,25 +76,34 @@ functions/
 │   └── *adminsdk*.json     # credenciales (local)
 ├── src/
 │   ├── controllers/
-│   │   └── entity.controller.js
+│   │   │── entity/
+│   │   |   └── entity.controller.js
+|   |   └──controllers.js
 │   ├── middlewares/
 │   │   └── auth.middleware.js
 │   │   └── error.middleware.js
 │   │   └── validate.middleware.js
+│   │   └── middlewares.js
 │   ├── repositories/
-│   │   └── entity.repository.js
+│   │   │── entity/
+│   │   |   └── entity.repository.js
+│   │   └── repositories.js
 │   ├── services/
 │   │   │── entity/
-│   │   │   ├── createEntity.service.js
-│   │   │   ├── getEntity.service.js
-│   │   │   ├── updateEntity.service.js
-│   │   │   └── deleteEntity.service.js
-│   │   └── entity.service.js
+│   │   │   ├── createsEntity.service.js
+│   │   │   ├── getsEntity.service.js
+│   │   │   ├── updatesEntity.service.js
+│   │   │   └── deletesEntity.service.js
+│   │   └── services.js
 │   │── utils/
 │   │   ├── firebase.js
 │   │   ├── errores.js
-│   │   ├── joi.primitives.js
 │   │   └── utils.js
+│   │── validations/
+│   │   │── entity/
+│   │   |   └── entity.schema.js
+│   │   ├── joi.primitives.js
+│   │   └── schemas.js
 |   ├── index.js
 |   ├── .env
 |   ├── .env.dev

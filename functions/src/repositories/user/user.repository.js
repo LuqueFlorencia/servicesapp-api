@@ -44,22 +44,6 @@ async function getUidByDni(dni) {
     return uid;
 };
 
-async function updatePersonalByUid(uid, personalData) {
-    const ref = db.ref(`${USERS_ROOT}/${uid}`);
-    const snapshot = await ref.once('value');
-
-    const user = snapshot.val();
-    if (!user) throw new ResourceNotFoundError(`No se encontró el usuario con uid = ${uid}.`);
-
-    const personalRef = ref.child('personal');
-    await personalRef.update(personalData);
-
-    const updatedSnap = await ref.once('value');
-    const updatedUser = updatedSnap.val();
-
-    return { ...updatedUser, id: uid };
-};
-
 async function updateRoleByUid(uid, role) {
     const ref = db.ref(`${USERS_ROOT}/${uid}`);
     const snapshot = await ref.once('value');
@@ -112,7 +96,6 @@ module.exports = {
     linkDniToUid,
     getUserDataId,
     getUidByDni,
-    updatePersonalByUid,
     updateRoleByUid,
     listUsersRepo,
     updateStatusByUid,

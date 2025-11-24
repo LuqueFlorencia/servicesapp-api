@@ -36,17 +36,6 @@ async function getUser (req, res) {
     ));
 };
 
-// PATCH /users/:dni/personal
-async function updatePersonalData (req, res) {
-    const dni = req.params.dni;
-    const personalData = req.body;
-    const data = await service.updatePersonalByDni(dni, personalData);
-
-    return res.status(httpStatusCodes.ok).json(getSuccessResponseObject(
-        data, httpStatusCodes.ok, 'OK', 'Datos personales actualizados.'
-    ));
-};
-
 // PATCH /users/:dni/role
 async function updateUserRole (req, res) {
     const dni = req.params.dni;
@@ -114,7 +103,6 @@ module.exports = {
     updateMyPersonalData,
     updateUser,
     getUser,
-    updatePersonalData,
     updateUserRole, 
     listUsers,
     updateUserStatus,

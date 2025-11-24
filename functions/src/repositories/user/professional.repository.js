@@ -34,6 +34,7 @@ async function getRatingByUid(uid) {
     if (!personal) throw new ResourceNotFoundError(`No se encontró el perfil personal para uid = ${uid}.`);
 
     return {
+        professionalName: personal.displayName,
         ratingAvg: personal.ratingAvg ?? 0,
         ratingCount: personal.ratingCount ?? 0,
     };
