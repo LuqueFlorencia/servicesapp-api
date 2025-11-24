@@ -1,7 +1,7 @@
 const { firebaseAdmin } = require('../utils/firebase.js');
 const { getAuth } = require('firebase-admin/auth');
 const { httpStatusCodes, AuthorizationError, ForbiddenError } = require('../utils/errores.js');
-const { getUserDataId } = require('../repositories/user.repository');
+const { getUserDataId } = require('../repositories/user/user.repository.js');
 
 const auth = getAuth(firebaseAdmin);
 const appToken = process.env.APP_INTERNAL_TOKEN;

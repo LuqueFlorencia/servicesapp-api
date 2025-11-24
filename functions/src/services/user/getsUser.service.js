@@ -1,5 +1,6 @@
-const  repo = require('../../repositories/user.repository');
+const repo = require('../../repositories/repositories');
 
+// Obtener un usuario por dni
 async function getUserByDni(dni) {
     const uid = await repo.getUidByDni(dni);
     const user = await repo.getUserDataId(uid);
@@ -7,9 +8,10 @@ async function getUserByDni(dni) {
     return user;
 };
 
+// Listar usuarios con filtros -role, city, province, active- (SOLO ADMIN)
 async function listUsers(filters) {
     const users = await repo.listUsersRepo(filters);
     return users;
 };
 
-module.exports = { getUserByDni, listUsers };
+module.exports = { getUserByDni, listUsers, };

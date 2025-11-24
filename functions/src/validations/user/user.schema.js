@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { dniScalar } = require('../joi.primitives');
 
 const personalSchema = Joi.object({
     displayName: Joi.string().max(250).required()
@@ -19,10 +20,8 @@ const personalSchema = Joi.object({
 
 const premiumSchema = Joi.object({
     plan: Joi.string().valid('standard', 'plus').required()
-        .messages({ 'any.only': 'plan debe ser standard o plus.' }),
-    active: Joi.boolean().required(),
-    paused: Joi.boolean().required(),
-    since: Joi.number().integer().min(0).allow(null).required()
+        .messages({ 'any.only': 'plan debe ser "standard" o "plus".' }),
+    since: Joi.number().integer().min(0).allow(null).optional()
         .messages({ 'number.base': 'since debe ser un entero (timestamp ms).' }),
 }).required();
 
@@ -31,16 +30,8 @@ const servicesSchema = Joi.object().pattern(
     Joi.object().pattern(Joi.string().min(1), Joi.valid(true))
 );
 
-const dniScalar = Joi.string()
-    .pattern(/^[0-9]{7,8}$/)
-    .required()
-    .messages({
-        'string.pattern.base': 'dni inválido (debe ser DNI numérico de 7 u 8 dígitos).',
-        'any.required': 'dni es requerido.',
-    });
-
-const uidUserSchema = Joi.object({
-    uid: dniScalar
+const dniUserSchema = Joi.object({
+    dni: dniScalar
 });
 
 const userPayloadSchema = Joi.object({
@@ -89,19 +80,13 @@ const statusPatchSchema = Joi.object({
         .messages({ 'any.required': 'is_deleted es requerido.' })
 });
 
-const updateProfileSchema = Joi.object({
-    personal: personalSchema,
-    premium: premiumSchema.optional(),
-    services: servicesSchema.optional(),
-});
-
 module.exports = { 
-    uidUserSchema,
+    dniUserSchema,
+    premiumSchema,
     userPayloadSchema, 
     initialPatchSchema,
     personalPatchSchema,
     rolePatchSchema,
     listUsersQuerySchema,
     statusPatchSchema,
-    updateProfileSchema,  
 };

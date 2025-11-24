@@ -30,4 +30,13 @@ const firebaseUidParamSchema = Joi.object({
         .required()
 });
 
-module.exports = { nonEmptyString, idRef, nullableString, uidParamSchema, firebaseUidParamSchema };
+// Valida dni escalar para users
+const dniScalar = Joi.string()
+    .pattern(/^[0-9]{7,8}$/)
+    .required()
+    .messages({
+        'string.pattern.base': 'dni inválido (debe ser DNI numérico de 7 u 8 dígitos).',
+        'any.required': 'dni es requerido.',
+    });
+
+module.exports = { nonEmptyString, idRef, nullableString, uidParamSchema, firebaseUidParamSchema, dniScalar };
