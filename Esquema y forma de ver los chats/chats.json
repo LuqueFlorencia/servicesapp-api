@@ -1,0 +1,33 @@
+{
+  "chats": {
+    "{chatId}": {
+      "proUid": "{proUid}",
+      "clientUid": "{clientUid}",
+      "lastMessage": {
+        "text": "Hola! ¿Tenés turno mañana?",
+        "timestamp": 1730332800000,
+        "senderUid": "{clientUid}",
+        "status": "sent"
+      },
+      "createdAt": 1730332800000
+    }
+  },
+
+  "messages": {
+    "{chatId}": {
+      "{messageId}": {
+        "senderUid": "{clientUid}",
+        "receiverUid": "{proUid}",
+        "text": "Hola! ¿Tenés turno mañana?",
+        "timestamp": 1730332800000,
+        "status": "sent"
+      }
+    }
+  },
+
+  "userChats": {
+    "{uid}": {
+      "{chatId}": true
+    }
+  }
+}

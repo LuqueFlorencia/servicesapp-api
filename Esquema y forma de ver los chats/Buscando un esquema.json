@@ -1,0 +1,36 @@
+{
+	"chats": {
+		"1": { "proUid":"23125", "clientUid": "23124", "lastMessage": { "text":"textContent", "timestamp":135654654646, "senderUid":"23125", "status":"sent" }, "createdAt":173032465465 },
+		"2": { "proUid":"23125", "clientUid": "23120", "lastMessage": { "text":"textContent", "timestamp":135654654646, "senderUid":"23125", "status":"received" }, "createdAt":173032465465 },
+		"3": { "proUid":"23125", "clientUid": "23121", "lastMessage": { "text":"textContent", "timestamp":135131518646, "senderUid":"23121", "status":"sent" }, "createdAt":173032465465 },
+		"4": { "proUid":"23127", "clientUid": "23122", "lastMessage": { "text":"textContent", "timestamp":135133245648, "senderUid":"23122", "status":"sent" }, "createdAt":173032465465 }
+	},
+	"messages": {
+		"1": {
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "received" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "received" }
+		},
+		"2": {
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "received" }
+		},
+		"3": {
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "received" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" }
+		},
+		"4": {
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "received" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "sent" },
+			"34": { "senderUid": "23125", "receiverUid":"23124", "text":"textContent", "timeStamp": 2349284723984, "status": "received" }
+		}
+	},
+	"userChats": {
+		"23124": { "1":true },
+		"23127": { "4":true }
+	}
+}
