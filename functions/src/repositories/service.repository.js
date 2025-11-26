@@ -1,16 +1,15 @@
-const { db } = require('../utils/firebase');
-const { ResourceNotFoundError } = require('../utils/httpsStatusCode');
+const { db } = require("../utils/firebase");
+const { ResourceNotFoundError } = require("../utils/errores");
 
 const basePath = (categoryId) => `services/${categoryId}`;
 
-
 async function getServiceDataId(categoryId, serviceId) {
   const ref = db.ref(`${basePath(categoryId)}/${serviceId}`);
-  const snapshot = await ref.once('value');
+  const snapshot = await ref.once("value");
   const data = snapshot.val();
 
   if (!data) {
-    throw new ResourceNotFoundError('No se encontró el servicio.');
+    throw new ResourceNotFoundError("No se encontró el servicio.");
   }
 
   return { ...data, id: serviceId };
@@ -18,7 +17,7 @@ async function getServiceDataId(categoryId, serviceId) {
 
 async function getServicesByCategory(categoryId) {
   const ref = db.ref(basePath(categoryId));
-  const snapshot = await ref.once('value');
+  const snapshot = await ref.once("value");
   const data = snapshot.val();
 
   if (!data) {
@@ -32,22 +31,6 @@ async function getServicesByCategory(categoryId) {
 
   return services;
 }
-
-
-async function deleteService(categoryId, serviceId) {
-  const ref = db.ref(`${basePath(categoryId)}/${serviceId}`);
-  const snapshot = await ref.once('value');
-
-  if (!snapshot.exists()) {
-    throw new ResourceNotFoundError('No se encontró el servicio a eliminar.');
-  }
-
-  const data = snapshot.val();
-  await ref.remove();
-
-  return { ...data, id: serviceId };
-}
-
 
 async function createServiceDatabase(categoryId, payload) {
   const ref = db.ref(basePath(categoryId)).push();
@@ -63,9 +46,40 @@ async function createServiceDatabase(categoryId, payload) {
   return { ...serviceToSave, id: serviceId };
 }
 
+async function deleteService(categoryId, serviceId) {
+  const ref = db.ref(`${basePath(categoryId)}/${serviceId}`);
+  const snapshot = await ref.once("value");
+
+  if (!snapshot.exists()) {
+    throw new ResourceNotFoundError("No se encontró el servicio a eliminar.");
+  }
+
+  const data = snapshot.val();
+  await ref.remove();
+
+  return { ...data, id: serviceId };
+}
+
+async function updateServiceDatabase(categoryId, serviceId, payload) {
+  const ref = db.ref(`${basePath(categoryId)}/${serviceId}`);
+  const snapshot = await ref.once("value");
+
+  if (!snapshot.exists()) {
+    throw new ResourceNotFoundError("No se encontró el servicio a actualizar.");
+  }
+
+  await ref.update(payload);
+
+  const updatedSnapshot = await ref.once("value");
+  const updated = updatedSnapshot.val();
+
+  return { ...updated, id: serviceId };
+}
+
 module.exports = {
   getServiceDataId,
   getServicesByCategory,
-  deleteService,
   createServiceDatabase,
+  deleteService,
+  updateServiceDatabase,
 };

@@ -1,14 +1,14 @@
-require('../config/environment');
-const express = require('express');
-const cors = require('cors');
-const functions = require('firebase-functions');
+require("../config/environment");
+const express = require("express");
+const cors = require("cors");
+const functions = require("firebase-functions");
 
-const auth_mw = require('../src/middlewares/auth.middleware');
-const val_mw = require('../src/middlewares/validate.middleware');
-const err_mw = require('../src/middlewares/error.middleware');
+const auth_mw = require("../src/middlewares/auth.middleware");
+const val_mw = require("../src/middlewares/validate.middleware");
+const err_mw = require("../src/middlewares/error.middleware");
 
-const schema = require('../src/services/service/service.schema');
-const serviceController = require('../src/controllers/service.controller');
+const schema = require("../src/validations/servicios/service.schema");
+const serviceController = require("../src/controllers/service.controller");
 
 const app = express();
 app.use(cors({ origin: true }));
@@ -18,7 +18,7 @@ app.use(express.json());
 
 // POST /services/:categoryId  => crear servicio (ADMIN)
 app.post(
-  '/:categoryId',
+  "/:categoryId",
   val_mw.validateParams(schema.categoryParamsSchema),
   val_mw.validateBody(schema.servicePayloadSchema),
   err_mw.asyncHandler(serviceController.createService)
@@ -26,7 +26,7 @@ app.post(
 
 // GET /services/:categoryId => listar servicios de categoría
 app.get(
-  '/:categoryId',
+  "/:categoryId",
   val_mw.validateParams(schema.categoryParamsSchema),
   val_mw.validateQuery(schema.listServicesQuerySchema),
   err_mw.asyncHandler(serviceController.listServices)
@@ -34,22 +34,22 @@ app.get(
 
 // GET /services/:categoryId/:serviceId => obtener servicio por id
 app.get(
-  '/:categoryId/:serviceId',
+  "/:categoryId/:serviceId",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(serviceController.getService)
 );
 
-// PATCH /services/:categoryId/:serviceId => actualizar servicio 
+// PATCH /services/:categoryId/:serviceId => actualizar servicio
 app.patch(
-  '/:categoryId/:serviceId',
+  "/:categoryId/:serviceId",
   val_mw.validateParams(schema.serviceParamsSchema),
   val_mw.validateBody(schema.servicePatchSchema),
   err_mw.asyncHandler(serviceController.updateService)
 );
 
-// DELETE /services/:categoryId/:serviceId => eliminar servicio 
+// DELETE /services/:categoryId/:serviceId => eliminar servicio
 app.delete(
-  '/:categoryId/:serviceId',
+  "/:categoryId/:serviceId",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(serviceController.deleteService)
 );

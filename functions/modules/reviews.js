@@ -1,25 +1,24 @@
-require('../config/environment');
-const express = require('express');
-const cors = require('cors');
-const functions = require('firebase-functions');
+require("../config/environment");
+const express = require("express");
+const cors = require("cors");
+const functions = require("firebase-functions");
 
-const auth_mw = require('../src/middlewares/auth.middleware');
-const val_mw = require('../src/middlewares/validate.middleware');
-const err_mw = require('../src/middlewares/error.middleware');
+const auth_mw = require("../src/middlewares/auth.middleware");
+const val_mw = require("../src/middlewares/validate.middleware");
+const err_mw = require("../src/middlewares/error.middleware");
 
-const schema = require('../src/services/service/service.schema');
-const reviewController = require('../src/controllers/review.controller');
+const schema = require("../src/validations/servicios/service.schema");
+const reviewController = require("../src/controllers/review.controller");
 
 const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-
 /* ===== RUTAS REVIEWS ===== */
 
 // POST /services/:categoryId/:serviceId/reviews => crear review
 app.post(
-  '/:categoryId/:serviceId/reviews',
+  "/:categoryId/:serviceId/reviews",
   auth_mw.validateFirebaseIdToken,
   val_mw.validateParams(schema.serviceParamsSchema),
   val_mw.validateBody(schema.reviewPayloadSchema),
@@ -28,21 +27,21 @@ app.post(
 
 // GET /services/:categoryId/:serviceId/reviews => listar reviews de un servicio
 app.get(
-  '/:categoryId/:serviceId/reviews',
+  "/:categoryId/:serviceId/reviews",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(reviewController.listReviews)
 );
 
 // GET /services/:categoryId/:serviceId/reviews/:reviewId => obtener una review
 app.get(
-  '/:categoryId/:serviceId/reviews/:reviewId',
+  "/:categoryId/:serviceId/reviews/:reviewId",
   val_mw.validateParams(schema.reviewParamsSchema),
   err_mw.asyncHandler(reviewController.getReview)
 );
 
 // DELETE /services/:categoryId/:serviceId/reviews/:reviewId => eliminar una review (ADMIN)
 app.delete(
-  '/:categoryId/:serviceId/reviews/:reviewId',
+  "/:categoryId/:serviceId/reviews/:reviewId",
   auth_mw.validateFirebaseIdToken,
   val_mw.validateParams(schema.reviewParamsSchema),
   auth_mw.requireAdmin,

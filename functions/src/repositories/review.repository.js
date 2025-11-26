@@ -1,19 +1,17 @@
-const { db } = require('../utils/firebase');
-const { ResourceNotFoundError } = require('../utils/httpsStatusCode');
+const { db } = require("../utils/firebase");
+const { ResourceNotFoundError } = require("../utils/errores");
 
-//RUTA BASE 
+//RUTA BASE
 const basePath = (categoryId, serviceId) =>
   `services/${categoryId}/${serviceId}/reviews`;
 
-
-
 async function getReviewDataId(categoryId, serviceId, reviewId) {
   const ref = db.ref(`${basePath(categoryId, serviceId)}/${reviewId}`);
-  const snapshot = await ref.once('value');
+  const snapshot = await ref.once("value");
   const data = snapshot.val();
 
   if (!data) {
-    throw new ResourceNotFoundError('No se encontró la reseña.');
+    throw new ResourceNotFoundError("No se encontró la reseña.");
   }
 
   return { ...data, id: reviewId };
@@ -21,7 +19,7 @@ async function getReviewDataId(categoryId, serviceId, reviewId) {
 
 async function getReviewsByService(categoryId, serviceId) {
   const ref = db.ref(basePath(categoryId, serviceId));
-  const snapshot = await ref.once('value');
+  const snapshot = await ref.once("value");
   const data = snapshot.val();
 
   if (!data) {
@@ -36,13 +34,12 @@ async function getReviewsByService(categoryId, serviceId) {
   return reviews;
 }
 
-
 async function deleteReview(categoryId, serviceId, reviewId) {
   const ref = db.ref(`${basePath(categoryId, serviceId)}/${reviewId}`);
-  const snapshot = await ref.once('value');
+  const snapshot = await ref.once("value");
 
   if (!snapshot.exists()) {
-    throw new ResourceNotFoundError('No se encontró la reseña a eliminar.');
+    throw new ResourceNotFoundError("No se encontró la reseña a eliminar.");
   }
 
   const data = snapshot.val();
@@ -50,8 +47,6 @@ async function deleteReview(categoryId, serviceId, reviewId) {
 
   return { ...data, id: reviewId };
 }
-
-
 
 async function createReviewDatabase(categoryId, serviceId, payload) {
   const ref = db.ref(basePath(categoryId, serviceId)).push();
