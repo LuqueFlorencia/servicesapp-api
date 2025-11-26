@@ -68,7 +68,7 @@ Para `database` es necesario tener instalado el JDK de Java 11 o 17 y agregado a
 
 ## 📁 Estructura del proyecto
 
-```text
+```
 functions/
 ├── config/
 │   └── environment.js

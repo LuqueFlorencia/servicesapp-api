@@ -33,3 +33,4 @@ exports.onAuthCreateProfile = functions.auth.user().onCreate(async (user) => {
 });
 
 exports.users = require('./modules/users').endpoints;
+exports.external = require('./modules/external').endpoints;
