@@ -22,7 +22,7 @@ function getErrorResponseObject(error, message = 'Algo salio mal.'){
     const response = {};
     console.log('ERROR ', error);
 
-    if (error instanceof util.DataValidationError || error instanceof util.BadRequestError)
+    if (error instanceof util.DataValidationError || error instanceof util.BadRequestError || util.ApiBadRequestError)
         response.status = util.httpStatusCodes.badRequest;
     else if (error instanceof util.AuthorizationError)
         response.status = util.httpStatusCodes.unauthorized;

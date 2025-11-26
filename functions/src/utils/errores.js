@@ -12,6 +12,13 @@ class BadRequestError extends Error {
     };
 };
 
+class ApiBadRequestError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'ApiBadRequestError';
+    };
+};
+
 class AuthorizationError extends Error {
     constructor(message) {
         super(message);
@@ -65,6 +72,7 @@ module.exports = {
     httpStatusCodes, 
     DataValidationError, 
     BadRequestError,
+    ApiBadRequestError,
     AuthorizationError, 
     ForbiddenError,
     NotFoundError,
