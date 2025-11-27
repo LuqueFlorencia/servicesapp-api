@@ -10,10 +10,6 @@ const gallerySchema = Joi.object({
     "string.uri": "photoURL debe ser una URL válida.",
     "any.required": "photoURL es requerido.",
   }),
-  createdAt: Joi.number().integer().min(0).required().messages({
-    "number.base": "createdAt debe ser un entero (timestamp ms).",
-    "any.required": "createdAt es requerido.",
-  }),
 }).required();
 
 const galleriesMapSchema = Joi.object()
@@ -36,9 +32,22 @@ const galleryPatchPayloadSchema = Joi.object({
   photoURL: Joi.string().uri(),
 }).min(1);
 
+const galleryParamsSchema = Joi.object({
+  categoryId: idRef
+    .required()
+    .messages({ "any.required": "categoryId es requerido." }),
+  serviceId: idRef
+    .required()
+    .messages({ "any.required": "serviceId es requerido." }),
+  galleryId: idRef
+  .required()
+  .messages({ "any.required": "categoryId es requerido." }),
+});
+
 module.exports = {
   gallerySchema,
   galleriesMapSchema,
   galleryPayloadSchema,
   galleryPatchPayloadSchema,
+  galleryParamsSchema,
 };

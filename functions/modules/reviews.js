@@ -8,6 +8,7 @@ const val_mw = require("../src/middlewares/validate.middleware");
 const err_mw = require("../src/middlewares/error.middleware");
 
 const schema = require("../src/validations/servicios/service.schema");
+const schema_review = require("../src/validations/servicios/review.schema")
 const reviewController = require("../src/controllers/review.controller");
 
 const app = express();
@@ -19,9 +20,8 @@ app.use(express.json());
 // POST /services/:categoryId/:serviceId/reviews => crear review
 app.post(
   "/:categoryId/:serviceId/reviews",
-  auth_mw.validateFirebaseIdToken,
   val_mw.validateParams(schema.serviceParamsSchema),
-  val_mw.validateBody(schema.reviewPayloadSchema),
+  val_mw.validateBody(schema_review.reviewPayloadSchema),
   err_mw.asyncHandler(reviewController.createReview)
 );
 
@@ -42,10 +42,16 @@ app.get(
 // DELETE /services/:categoryId/:serviceId/reviews/:reviewId => eliminar una review (ADMIN)
 app.delete(
   "/:categoryId/:serviceId/reviews/:reviewId",
-  auth_mw.validateFirebaseIdToken,
-  val_mw.validateParams(schema.reviewParamsSchema),
-  auth_mw.requireAdmin,
+  val_mw.validateParams(schema_review.reviewParamsSchema),
+  // auth_mw.requireAdmin,
   err_mw.asyncHandler(reviewController.deleteReview)
+);
+
+app.patch(
+  "/:categoryId/:serviceId/reviews/:reviewId",
+  val_mw.validateParams(schema_review.reviewParamsSchema),      
+  val_mw.validateBody(schema_review.reviewPatchSchema),  
+  err_mw.asyncHandler(reviewController.updateReview)
 );
 
 /* ===== MIDDLEWARES DE ERROR ===== */

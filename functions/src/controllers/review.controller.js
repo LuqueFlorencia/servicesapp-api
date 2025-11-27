@@ -24,7 +24,7 @@ async function createReview(req, res) {
 async function listReviews(req, res) {
   const { categoryId, serviceId } = req.params;
 
-  const data = await reviewService.getReviewsByService(categoryId, serviceId);
+  const data = await reviewService.listReview(categoryId, serviceId);
 
   return res
     .status(httpStatusCodes.ok)
@@ -78,9 +78,34 @@ async function deleteReview(req, res) {
     );
 }
 
+// PATCH /services/:categoryId/:serviceId/reviews/:reviewId
+async function updateReview(req, res) {
+  const { categoryId, serviceId, reviewId } = req.params;
+  const payload = req.body;
+
+  const data = await reviewService.updateReviewId(
+    categoryId,
+    serviceId,
+    reviewId,
+    payload
+  );
+
+  return res
+    .status(httpStatusCodes.ok)
+    .json(
+      getSuccessResponseObject(
+        data,
+        httpStatusCodes.ok,
+        "OK",
+        "Reseña actualizada."
+      )
+    );
+}
+
 module.exports = {
   createReview,
   listReviews,
   getReview,
   deleteReview,
+  updateReview,
 };

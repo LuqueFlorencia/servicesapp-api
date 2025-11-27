@@ -21,7 +21,7 @@ app.post(
   "/:categoryId",
   val_mw.validateParams(schema.categoryParamsSchema),
   val_mw.validateBody(schema.servicePayloadSchema),
-  err_mw.asyncHandler(serviceController.createService)
+  err_mw.asyncHandler(serviceController.createService),
 );
 
 // GET /services/:categoryId => listar servicios de categoría
