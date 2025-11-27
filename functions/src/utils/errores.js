@@ -13,11 +13,11 @@ class BadRequestError extends Error {
 }
 
 class ApiBadRequestError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'ApiBadRequestError';
-    };
-};
+  constructor(message) {
+    super(message);
+    this.name = "ApiBadRequestError";
+  }
+}
 
 class AuthorizationError extends Error {
   constructor(message) {
@@ -75,28 +75,14 @@ const httpStatusCodes = {
   internalServerError: 500,
 };
 
-<<<<<<< HEAD
 module.exports = {
   httpStatusCodes,
   DataValidationError,
   BadRequestError,
+  ApiBadRequestError,
   AuthorizationError,
   ForbiddenError,
   NotFoundError,
   ResourceNotFoundError,
   DatabaseError,
-  EmptySetError,
 };
-=======
-module.exports = { 
-    httpStatusCodes, 
-    DataValidationError, 
-    BadRequestError,
-    ApiBadRequestError,
-    AuthorizationError, 
-    ForbiddenError,
-    NotFoundError,
-    ResourceNotFoundError,
-    DatabaseError, 
-};
->>>>>>> f5f43dc7fd6fdb0afe05b9d7fd46fa81f33622f9
