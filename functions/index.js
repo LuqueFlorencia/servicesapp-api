@@ -35,3 +35,4 @@ exports.users = require("./modules/users").endpoints;
 exports.categories = require("./modules/categories").endpoints;
 exports.services = require("./modules/services").endpoints;
 exports.reviews = require("./modules/reviews").endpoints;
+exports.gallerys = require("./modules/gallerys").endpoints;

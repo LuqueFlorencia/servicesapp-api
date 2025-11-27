@@ -62,9 +62,26 @@ async function createReviewDatabase(categoryId, serviceId, payload) {
   return { ...reviewToSave, id: reviewId };
 }
 
+async function updateReview(categoryId, serviceId, reviewId, payload) {
+  const ref = db.ref(`${basePath(categoryId, serviceId)}/${reviewId}`);
+  const snapshot = await ref.once("value");
+
+  if (!snapshot.exists()) {
+    throw new ResourceNotFoundError("No se encontró la reseña a actualizar.");
+  }
+
+  const existing = snapshot.val();
+  const merged = { ...existing, ...payload };
+
+  await ref.set(merged);
+
+  return { ...merged, id: reviewId };
+}
+
 module.exports = {
   getReviewDataId,
   getReviewsByService,
   deleteReview,
   createReviewDatabase,
+  updateReview,
 };

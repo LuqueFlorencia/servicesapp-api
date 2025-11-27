@@ -1,10 +1,9 @@
-const { db } = require('../utils/firebase');
-const { ResourceNotFoundError } = require('../utils/httpsStatusCode');
+const { db } = require('../../utils/firebase');
+const { ResourceNotFoundError } = require('../../utils/errores');
 
 const basePath = (categoryId) => `services/${categoryId}`;
 
-
-async function updateServiceDatabase(categoryId, serviceId, payload) {
+async function updateService(categoryId, serviceId, payload) {
   const ref = db.ref(`${basePath(categoryId)}/${serviceId}`);
   const snapshot = await ref.once('value');
 
@@ -20,7 +19,4 @@ async function updateServiceDatabase(categoryId, serviceId, payload) {
   return { ...updated, id: serviceId };
 }
 
-
-module.exports = {
-  updateServiceDatabase
-};
+module.exports = { updateService };

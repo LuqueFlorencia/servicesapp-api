@@ -7,7 +7,7 @@ async function createService(req, res) {
   const { categoryId } = req.params;
   const payload = req.body;
 
-  const data = await service.createService(categoryId, payload);
+  const data = await service.createServiceData(categoryId, payload);
 
   return res
     .status(httpStatusCodes.ok)
@@ -26,7 +26,7 @@ async function listServices(req, res) {
   const { categoryId } = req.params;
   const filters = req.query;
 
-  const data = await service.listServices(categoryId, filters);
+  const data = await service.getServices(categoryId, filters);
 
   return res
     .status(httpStatusCodes.ok)
@@ -63,7 +63,7 @@ async function updateService(req, res) {
   const { categoryId, serviceId } = req.params;
   const payload = req.body;
 
-  const data = await service.updateServiceById(categoryId, serviceId, payload);
+  const data = await service.updateService(categoryId, serviceId, payload);
 
   return res
     .status(httpStatusCodes.ok)
@@ -81,7 +81,7 @@ async function updateService(req, res) {
 async function deleteService(req, res) {
   const { categoryId, serviceId } = req.params;
 
-  const data = await service.deleteServiceById(categoryId, serviceId);
+  const data = await service.deleteServiceId(categoryId, serviceId);
 
   return res
     .status(httpStatusCodes.ok)

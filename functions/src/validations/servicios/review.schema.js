@@ -35,8 +35,27 @@ const reviewPayloadSchema = Joi.object({
   comment: Joi.string().max(1000).allow(""),
 }).required();
 
+const reviewPatchSchema = Joi.object({
+  rating: Joi.number().integer().min(1).max(5),
+  comment: Joi.string().max(1000).allow(""),
+}).min(1);
+
+const reviewParamsSchema = Joi.object({
+  categoryId: idRef
+    .required()
+    .messages({ "any.required": "categoryId es requerido." }),
+  serviceId: idRef
+    .required()
+    .messages({ "any.required": "serviceId es requerido." }),
+  reviewId: idRef
+  .required()
+  .messages({ "any.required": "reviewId es requerido." }),
+});
+
 module.exports = {
   reviewSchema,
   reviewsMapSchema,
   reviewPayloadSchema,
+  reviewPatchSchema,
+  reviewParamsSchema,
 };

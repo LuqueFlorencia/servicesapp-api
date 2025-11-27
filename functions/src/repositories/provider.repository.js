@@ -1,5 +1,5 @@
 const { db } = require('../utils/firebase');
-const { ResourceNotFoundError } = require('../utils/httpsStatusCode');
+const { ResourceNotFoundError } = require("../utils/errores");
 
 // RUTA BASE: services/{categoryId}/{serviceId}/providers
 const basePath = (categoryId, serviceId) =>
