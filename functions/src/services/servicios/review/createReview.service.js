@@ -1,4 +1,6 @@
-const { createReviewDatabase } = require('../../repositories/review.repository');
+const {
+  createReviewDatabase,
+} = require("../../../repositories/review.repository");
 
 async function createReviewData(categoryId, serviceId, payload) {
   const created = await createReviewDatabase(categoryId, serviceId, payload);

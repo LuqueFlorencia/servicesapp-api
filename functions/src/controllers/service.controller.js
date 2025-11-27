@@ -1,6 +1,6 @@
-const { getSuccessResponseObject } = require('../utils/utils');
-const { httpStatusCodes } = require('../utils/errores');
-const service = require('../services/service.service');
+const { getSuccessResponseObject } = require("../utils/utils");
+const { httpStatusCodes } = require("../utils/errores");
+const service = require("../services/servicios/servicio.service");
 
 // POST /services/:categoryId
 async function createService(req, res) {
@@ -9,9 +9,16 @@ async function createService(req, res) {
 
   const data = await service.createService(categoryId, payload);
 
-  return res.status(httpStatusCodes.ok).json(
-    getSuccessResponseObject(data, httpStatusCodes.ok, 'OK', 'Servicio creado.')
-  );
+  return res
+    .status(httpStatusCodes.ok)
+    .json(
+      getSuccessResponseObject(
+        data,
+        httpStatusCodes.ok,
+        "OK",
+        "Servicio creado."
+      )
+    );
 }
 
 // GET /services/:categoryId
@@ -21,9 +28,16 @@ async function listServices(req, res) {
 
   const data = await service.listServices(categoryId, filters);
 
-  return res.status(httpStatusCodes.ok).json(
-    getSuccessResponseObject(data, httpStatusCodes.ok, 'OK', 'Servicios obtenidos.')
-  );
+  return res
+    .status(httpStatusCodes.ok)
+    .json(
+      getSuccessResponseObject(
+        data,
+        httpStatusCodes.ok,
+        "OK",
+        "Servicios obtenidos."
+      )
+    );
 }
 
 // GET /services/:categoryId/:serviceId
@@ -32,9 +46,16 @@ async function getService(req, res) {
 
   const data = await service.getServiceById(categoryId, serviceId);
 
-  return res.status(httpStatusCodes.ok).json(
-    getSuccessResponseObject(data, httpStatusCodes.ok, 'OK', 'Servicio obtenido.')
-  );
+  return res
+    .status(httpStatusCodes.ok)
+    .json(
+      getSuccessResponseObject(
+        data,
+        httpStatusCodes.ok,
+        "OK",
+        "Servicio obtenido."
+      )
+    );
 }
 
 // PATCH /services/:categoryId/:serviceId
@@ -44,9 +65,16 @@ async function updateService(req, res) {
 
   const data = await service.updateServiceById(categoryId, serviceId, payload);
 
-  return res.status(httpStatusCodes.ok).json(
-    getSuccessResponseObject(data, httpStatusCodes.ok, 'OK', 'Servicio actualizado.')
-  );
+  return res
+    .status(httpStatusCodes.ok)
+    .json(
+      getSuccessResponseObject(
+        data,
+        httpStatusCodes.ok,
+        "OK",
+        "Servicio actualizado."
+      )
+    );
 }
 
 // DELETE /services/:categoryId/:serviceId
@@ -55,9 +83,16 @@ async function deleteService(req, res) {
 
   const data = await service.deleteServiceById(categoryId, serviceId);
 
-  return res.status(httpStatusCodes.ok).json(
-    getSuccessResponseObject(data, httpStatusCodes.ok, 'OK', 'Servicio eliminado.')
-  );
+  return res
+    .status(httpStatusCodes.ok)
+    .json(
+      getSuccessResponseObject(
+        data,
+        httpStatusCodes.ok,
+        "OK",
+        "Servicio eliminado."
+      )
+    );
 }
 
 module.exports = {

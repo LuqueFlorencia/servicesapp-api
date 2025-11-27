@@ -33,3 +33,6 @@ exports.onAuthCreateProfile = functions.auth.user().onCreate(async (user) => {
 
 exports.users = require("./modules/users").endpoints;
 exports.appointments = require("./modules/appointment").endpoints;
+exports.categories = require("./modules/categories").endpoints;
+exports.services = require("./modules/services").endpoints;
+exports.reviews = require("./modules/reviews").endpoints;

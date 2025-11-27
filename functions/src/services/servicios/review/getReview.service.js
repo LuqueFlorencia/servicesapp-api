@@ -1,4 +1,4 @@
-const { getReviewDataId } = require('../../repositories/review.repository');
+const { getReviewDataId } = require("../../../repositories/review.repository");
 
 async function getReviewId(categoryId, serviceId, reviewId) {
   const review = await getReviewDataId(categoryId, serviceId, reviewId);
