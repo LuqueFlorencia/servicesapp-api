@@ -55,7 +55,6 @@ async function getAppointments(filters = {}, user) {
     appointments = appointments.filter((apt) => apt.is_deleted !== true);
   }
 
-  // Aplicar filtros adicionales
   if (filters.usuarioId) {
     appointments = appointments.filter(
       (apt) => apt.usuarioId === filters.usuarioId
@@ -72,7 +71,6 @@ async function getAppointments(filters = {}, user) {
     appointments = appointments.filter((apt) => apt.estado === filters.estado);
   }
 
-  // Filtrar por tipo: "usuario" o "profesional"
   if (filters.tipo === "usuario" && filters.usuarioId) {
     appointments = appointments.filter(
       (apt) => apt.usuarioId === filters.usuarioId
@@ -94,7 +92,6 @@ async function updateAppointment(appointmentId, updateData) {
 
   const ref = db.ref(`${APPOINTMENTS_ROOT}/${appointmentId}`);
 
-  // Verificar qué campos se van a actualizar
   console.log("Campos a actualizar en Firebase:");
   Object.keys(updateData).forEach((key) => {
     console.log(`- ${key}: ${updateData[key]}`);

@@ -1,7 +1,6 @@
 const repository = require("../../repositories/appointment.repository");
 const userRepository = require("../../repositories/user/user.repository");
 
-// BORRADO LÓGICO - Solo usuario dueño (para /cancel)
 async function deleteAppointmentLogical(req, res) {
   try {
     const appointmentId = req.params.appointmentId;
@@ -15,12 +14,10 @@ async function deleteAppointmentLogical(req, res) {
 
     const userId = req.user.uid;
 
-    // Solo el usuario dueño puede hacer borrado lógico
     if (existingAppointment.usuarioId !== userId) {
       throw new Error("Solo el usuario que creó el turno puede cancelarlo");
     }
 
-    // En lugar de borrar físicamente, hacemos eliminación lógica
     const updateData = {
       is_deleted: true,
       ultimaActualizacion: new Date().toISOString(),
@@ -42,7 +39,6 @@ async function deleteAppointmentLogical(req, res) {
   }
 }
 
-// BORRADO FÍSICO - Solo admin (para DELETE normal)
 async function deleteAppointmentPhysical(req, res) {
   try {
     const appointmentId = req.params.appointmentId;
@@ -56,14 +52,12 @@ async function deleteAppointmentPhysical(req, res) {
 
     const userId = req.user.uid;
 
-    // OBTENER EL ROL DEL USUARIO USANDO EL REPOSITORY
     const userData = await userRepository.getUserDataId(userId);
     const userRole = userData.role;
 
     console.log("User ID:", userId);
     console.log("User Role:", userRole);
 
-    // Solo admin puede hacer borrado físico
     if (userRole !== "admin") {
       throw new Error("No autorizado (se requiere rol admin)");
     }

@@ -6,25 +6,21 @@ async function getAppointmentsByDateRange(req, res) {
     const { fechaDesde, fechaHasta, estado, profesionalId } = req.query;
     const userId = req.user.uid;
 
-    // VERIFICACIÓN EXTRA DE SEGURIDAD
     const userData = await userRepository.getUserDataId(userId);
     if (userData.role !== "admin") {
       throw new Error("No autorizado. Se requiere rol de administrador.");
     }
 
-    // Obtener todos los turnos (admin view para ver todos)
     const allAppointments = await repository.getAppointments(
       {},
       { role: "admin" }
     );
 
-    // Filtrar por rango de fechas
     let filtered = allAppointments.filter((apt) => {
       const aptDate = apt.fecha;
       return aptDate >= fechaDesde && aptDate <= fechaHasta;
     });
 
-    // Filtros adicionales
     if (estado) {
       filtered = filtered.filter((apt) => apt.estado === estado);
     }
@@ -33,7 +29,6 @@ async function getAppointmentsByDateRange(req, res) {
       filtered = filtered.filter((apt) => apt.profesionalId === profesionalId);
     }
 
-    // AGREGAR INFORMACIÓN SOBRE LOS RESULTADOS
     const result = {
       appointments: filtered,
       count: filtered.length,

@@ -35,20 +35,15 @@ async function getDailyAppointments(req, res) {
       (apt) => apt.fecha === fecha
     );
 
-    // Si se especifica tipo, aplicar filtro adicional
     let filteredByType = dailyAppointments;
     if (tipo === "usuario" && userRole === "pro") {
-      // Profesional viendo solo turnos de usuarios (sin filtro adicional)
     } else if (tipo === "profesional" && userRole !== "pro") {
-      // Usuario viendo solo turnos de profesionales (sin filtro adicional)
     }
 
-    // Organizar por hora para mejor visualización
     const sortedAppointments = filteredByType.sort((a, b) => {
       return a.hora.localeCompare(b.hora);
     });
 
-    // Estadísticas del día
     const stats = {
       total: filteredByType.length,
       pendientes: filteredByType.filter((a) => a.estado === "pendiente").length,

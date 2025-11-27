@@ -7,7 +7,7 @@ async function getMyAppointments(req, res) {
 
     const filters = {
       usuarioId: userId,
-      estado: estado, // Filtro opcional por estado
+      estado: estado,
     };
 
     const appointments = await repository.getAppointments(filters, req.user);

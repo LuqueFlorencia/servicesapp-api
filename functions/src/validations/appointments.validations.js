@@ -40,7 +40,7 @@ const dailyAppointmentsSchema = Joi.object({
   fecha: Joi.string()
     .pattern(/^\d{4}-\d{2}-\d{2}$/)
     .required(),
-  tipo: Joi.string().valid("usuario", "profesional").optional(), // Para filtrar por perspectiva
+  tipo: Joi.string().valid("usuario", "profesional").optional(),
 });
 
 module.exports = {

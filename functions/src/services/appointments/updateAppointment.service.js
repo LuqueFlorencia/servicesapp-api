@@ -1,8 +1,5 @@
 const repository = require("../../repositories/appointment.repository");
 
-// =========================================================
-//  UPDATE SOLO DEL ESTADO
-// =========================================================
 async function updateAppointmentState(req, res) {
   try {
     const appointmentId = req.params.appointmentId;
@@ -19,12 +16,10 @@ async function updateAppointmentState(req, res) {
 
     const professionalAllowed = ["confirmado", "rechazado", "completado"];
 
-    // Usuario solo puede cancelar
     if (estado === "cancelado" && !isOwner) {
       throw new Error("Solo el usuario puede cancelar el turno");
     }
 
-    // Profesional maneja el resto de los estados
     if (professionalAllowed.includes(estado) && !isProfessional) {
       throw new Error("Solo el profesional puede realizar esta acción");
     }
@@ -57,9 +52,6 @@ async function updateAppointmentState(req, res) {
   }
 }
 
-// =========================================================
-//  UPDATE COMPLETO (cualquier campo del turno)
-// =========================================================
 async function updateAppointmentFull(req, res) {
   try {
     const appointmentId = req.params.appointmentId;
@@ -68,16 +60,6 @@ async function updateAppointmentFull(req, res) {
     console.log("req.body EN SERVICE:", req.body);
     console.log("Type of req.body:", typeof req.body);
     console.log("Keys in req.body:", Object.keys(req.body));
-
-    // Verificar si el body está corrupto
-    if (typeof req.body === "string") {
-      console.log("❌ req.body es string en lugar de objeto");
-      try {
-        req.body = JSON.parse(req.body);
-      } catch (parseError) {
-        throw new Error("Body JSON inválido: " + parseError.message);
-      }
-    }
 
     const existing = await repository.getAppointmentById(appointmentId);
     if (!existing) {
@@ -103,9 +85,6 @@ async function updateAppointmentFull(req, res) {
   }
 }
 
-// =========================================================
-//  EXPORTS
-// =========================================================
 module.exports = {
   updateAppointmentState,
   updateAppointmentFull,
