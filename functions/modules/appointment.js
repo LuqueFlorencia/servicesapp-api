@@ -9,13 +9,7 @@ const controller = require("../src/controllers/controllers");
 
 const app = express();
 
-app.use((req, res, next) => {
-  console.log("=== DEBUG BODY ===");
-  console.log("req.body type:", typeof req.body);
-  console.log("req.body keys:", Object.keys(req.body));
-  console.log("req.body:", req.body);
-  next();
-});
+
 
 app.use(cors({ origin: true }));
 app.use(express.json());

@@ -15,9 +15,8 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-/* ===== RUTAS GALLERYS ===== */
 
-// POST /services/:categoryId/:serviceId/gallerys => crear gallery
+// POST  || crear galería
 app.post(
   "/:categoryId/:serviceId/gallerys",
   val_mw.validateParams(schema.serviceParamsSchema),
@@ -25,28 +24,28 @@ app.post(
   err_mw.asyncHandler(galleryController.createGallery)
 );
 
-// GET /services/:categoryId/:serviceId/gallerys => listar gallerys de un servicio
+// GET || listar galerías de un servicio
 app.get(
   "/:categoryId/:serviceId/gallerys",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(galleryController.listGallerys)
 );
 
-// GET /services/:categoryId/:serviceId/gallerys/:galleryId => obtener una gallery
+// GET || obtener una galería
 app.get(
   "/:categoryId/:serviceId/gallery/:galleryId",
   val_mw.validateParams(schema_gallery.galleryParamsSchema),
   err_mw.asyncHandler(galleryController.getGallery)
 );
 
-// DELETE /services/:categoryId/:serviceId/gallerys/:galleryId => eliminar una gallery (ADMIN)
+// DELETE || eliminar una gallery (debería ser solo ADMIN)
 app.delete(
   "/:categoryId/:serviceId/gallery/:galleryId",
   val_mw.validateParams(schema_gallery.galleryParamsSchema),
   err_mw.asyncHandler(galleryController.deleteGallery)
 );
 
-/* ===== MIDDLEWARES DE ERROR ===== */
+//middlewares de errores
 
 app.use(err_mw.jsonInvalidHandler);
 app.use(err_mw.notFoundHandler);

@@ -15,9 +15,8 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-/* ===== RUTAS REVIEWS ===== */
 
-// POST /services/:categoryId/:serviceId/reviews => crear review
+// POST || crear reseña
 app.post(
   "/:categoryId/:serviceId/reviews",
   val_mw.validateParams(schema.serviceParamsSchema),
@@ -25,21 +24,21 @@ app.post(
   err_mw.asyncHandler(reviewController.createReview)
 );
 
-// GET /services/:categoryId/:serviceId/reviews => listar reviews de un servicio
+// GET || listar reseñas de un servicio
 app.get(
   "/:categoryId/:serviceId/reviews",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(reviewController.listReviews)
 );
 
-// GET /services/:categoryId/:serviceId/reviews/:reviewId => obtener una review
+// GET || obtener una reseña
 app.get(
   "/:categoryId/:serviceId/reviews/:reviewId",
   val_mw.validateParams(schema.reviewParamsSchema),
   err_mw.asyncHandler(reviewController.getReview)
 );
 
-// DELETE /services/:categoryId/:serviceId/reviews/:reviewId => eliminar una review (ADMIN)
+// DELETE || eliminar una reseña
 app.delete(
   "/:categoryId/:serviceId/reviews/:reviewId",
   val_mw.validateParams(schema_review.reviewParamsSchema),
@@ -54,7 +53,7 @@ app.patch(
   err_mw.asyncHandler(reviewController.updateReview)
 );
 
-/* ===== MIDDLEWARES DE ERROR ===== */
+//middlewares de error
 
 app.use(err_mw.jsonInvalidHandler);
 app.use(err_mw.notFoundHandler);

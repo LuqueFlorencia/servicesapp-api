@@ -1,4 +1,3 @@
-// module/chats.js
 require('../config/environment');
 
 const express = require('express');

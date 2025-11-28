@@ -56,11 +56,6 @@ async function updateAppointmentFull(req, res) {
   try {
     const appointmentId = req.params.appointmentId;
 
-    console.log("=== DEBUG UPDATE FULL SERVICE ===");
-    console.log("req.body EN SERVICE:", req.body);
-    console.log("Type of req.body:", typeof req.body);
-    console.log("Keys in req.body:", Object.keys(req.body));
-
     const existing = await repository.getAppointmentById(appointmentId);
     if (!existing) {
       throw new Error("Turno no encontrado");
@@ -71,8 +66,6 @@ async function updateAppointmentFull(req, res) {
       ultimaActualizacion: new Date().toISOString(),
     };
 
-    console.log("updateData final:", updateData);
-    console.log("Keys in updateData:", Object.keys(updateData));
 
     const updated = await repository.updateAppointment(
       appointmentId,

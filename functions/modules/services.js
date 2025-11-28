@@ -14,9 +14,7 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-/* ===== RUTAS SERVICES ===== */
-
-// POST /services/:categoryId  => crear servicio (ADMIN)
+// POST || crear servicio 
 app.post(
   "/:categoryId",
   val_mw.validateParams(schema.categoryParamsSchema),
@@ -24,7 +22,7 @@ app.post(
   err_mw.asyncHandler(serviceController.createService),
 );
 
-// GET /services/:categoryId => listar servicios de categoría
+// GET || listar servicios de categoría
 app.get(
   "/:categoryId",
   val_mw.validateParams(schema.categoryParamsSchema),
@@ -32,14 +30,14 @@ app.get(
   err_mw.asyncHandler(serviceController.listServices)
 );
 
-// GET /services/:categoryId/:serviceId => obtener servicio por id
+// GET || obtener servicio por id
 app.get(
   "/:categoryId/:serviceId",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(serviceController.getService)
 );
 
-// PATCH /services/:categoryId/:serviceId => actualizar servicio
+// PATCH || actualizar servicio
 app.patch(
   "/:categoryId/:serviceId",
   val_mw.validateParams(schema.serviceParamsSchema),
@@ -47,14 +45,14 @@ app.patch(
   err_mw.asyncHandler(serviceController.updateService)
 );
 
-// DELETE /services/:categoryId/:serviceId => eliminar servicio
+// DELETE || eliminar servicio
 app.delete(
   "/:categoryId/:serviceId",
   val_mw.validateParams(schema.serviceParamsSchema),
   err_mw.asyncHandler(serviceController.deleteService)
 );
 
-/* ===== MIDDLEWARES DE ERROR ===== */
+//middlewares de error
 
 app.use(err_mw.jsonInvalidHandler);
 app.use(err_mw.notFoundHandler);

@@ -2,7 +2,7 @@ const { getSuccessResponseObject } = require("../utils/utils");
 const { httpStatusCodes } = require("../utils/errores");
 const galleryService = require("../services/servicios/gallery/gallery.service");
 
-// POST /services/:categoryId/:serviceId/gallerys
+// POST 
 async function createGallery(req, res) {
   const { categoryId, serviceId } = req.params;
   const payload = req.body;
@@ -20,7 +20,7 @@ async function createGallery(req, res) {
     );
 }
 
-// GET /services/:categoryId/:serviceId/gallerys
+// GET
 async function listGallerys(req, res) {
   const { categoryId, serviceId } = req.params;
 
@@ -38,7 +38,7 @@ async function listGallerys(req, res) {
     );
 }
 
-// GET /services/:categoryId/:serviceId/gallerys/:galleryId
+// GET 
 async function getGallery(req, res) {
   const { categoryId, serviceId, galleryId } = req.params;
 
@@ -56,7 +56,7 @@ async function getGallery(req, res) {
     );
 }
 
-// DELETE /services/:categoryId/:serviceId/gallerys/:galleryId
+// DELETE
 async function deleteGallery(req, res) {
   const { categoryId, serviceId, galleryId } = req.params;
 

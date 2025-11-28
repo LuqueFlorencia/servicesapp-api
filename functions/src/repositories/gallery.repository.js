@@ -1,7 +1,7 @@
 const { db } = require('../utils/firebase');
 const { ResourceNotFoundError } = require("../utils/errores");
 
-// RUTA BASE: services/{categoryId}/{serviceId}/gallery  
+// RUTA BASE
 const basePath = (categoryId, serviceId) =>
   `services/${categoryId}/${serviceId}/gallery`;
 

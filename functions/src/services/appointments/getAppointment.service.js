@@ -11,6 +11,8 @@ async function getAppointments(req, res) {
     try {
       const userRepository = require("../../repositories/user/user.repository");
       const userData = await userRepository.getUserDataId(req.user.uid);
+      console.log("UserData:", userData);
+
       userRole = userData.role;
     } catch (error) {
       userRole = "client";

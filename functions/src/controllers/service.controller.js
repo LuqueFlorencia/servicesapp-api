@@ -2,7 +2,7 @@ const { getSuccessResponseObject } = require("../utils/utils");
 const { httpStatusCodes } = require("../utils/errores");
 const service = require("../services/servicios/servicio.service");
 
-// POST /services/:categoryId
+// POST 
 async function createService(req, res) {
   const { categoryId } = req.params;
   const payload = req.body;
@@ -21,7 +21,7 @@ async function createService(req, res) {
     );
 }
 
-// GET /services/:categoryId
+// GET 
 async function listServices(req, res) {
   const { categoryId } = req.params;
   const filters = req.query;
@@ -40,7 +40,7 @@ async function listServices(req, res) {
     );
 }
 
-// GET /services/:categoryId/:serviceId
+// GET 
 async function getService(req, res) {
   const { categoryId, serviceId } = req.params;
 
@@ -58,7 +58,7 @@ async function getService(req, res) {
     );
 }
 
-// PATCH /services/:categoryId/:serviceId
+// PATCH 
 async function updateService(req, res) {
   const { categoryId, serviceId } = req.params;
   const payload = req.body;
@@ -77,7 +77,7 @@ async function updateService(req, res) {
     );
 }
 
-// DELETE /services/:categoryId/:serviceId
+// DELETE 
 async function deleteService(req, res) {
   const { categoryId, serviceId } = req.params;
 

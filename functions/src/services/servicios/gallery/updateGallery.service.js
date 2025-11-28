@@ -1,6 +1,4 @@
-const {
-  updateGalleryDatabase,
-} = require("../../../repositories/gallery.repository");
+const { updateGalleryDatabase } = require("../../../repositories/gallery.repository");
 
 async function updateGalleryData(categoryId, serviceId, galleryId, payload) {
   const updated = await updateGalleryDatabase(

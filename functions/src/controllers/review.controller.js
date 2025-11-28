@@ -2,7 +2,7 @@ const { getSuccessResponseObject } = require("../utils/utils");
 const { httpStatusCodes } = require("../utils/errores");
 const reviewService = require("../services/servicios/review/review.service");
 
-// POST /services/:categoryId/:serviceId/reviews
+// POST 
 async function createReview(req, res) {
   const { categoryId, serviceId } = req.params;
   const payload = req.body;
@@ -20,7 +20,7 @@ async function createReview(req, res) {
     );
 }
 
-// GET /services/:categoryId/:serviceId/reviews
+// GET 
 async function listReviews(req, res) {
   const { categoryId, serviceId } = req.params;
 
@@ -38,7 +38,7 @@ async function listReviews(req, res) {
     );
 }
 
-// GET /services/:categoryId/:serviceId/reviews/:reviewId
+// GET 
 async function getReview(req, res) {
   const { categoryId, serviceId, reviewId } = req.params;
 
@@ -56,7 +56,7 @@ async function getReview(req, res) {
     );
 }
 
-// DELETE /services/:categoryId/:serviceId/reviews/:reviewId
+// DELETE 
 async function deleteReview(req, res) {
   const { categoryId, serviceId, reviewId } = req.params;
 
@@ -78,7 +78,7 @@ async function deleteReview(req, res) {
     );
 }
 
-// PATCH /services/:categoryId/:serviceId/reviews/:reviewId
+// PATCH 
 async function updateReview(req, res) {
   const { categoryId, serviceId, reviewId } = req.params;
   const payload = req.body;

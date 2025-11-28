@@ -85,14 +85,10 @@ async function getAppointments(filters = {}, user) {
 }
 
 async function updateAppointment(appointmentId, updateData) {
-  console.log("=== DEBUG REPOSITORY UPDATE ===");
-  console.log("updateData EN REPOSITORY:", updateData);
-  console.log("Type of updateData:", typeof updateData);
-  console.log("Keys in updateData:", Object.keys(updateData));
 
   const ref = db.ref(`${APPOINTMENTS_ROOT}/${appointmentId}`);
 
-  console.log("Campos a actualizar en Firebase:");
+
   Object.keys(updateData).forEach((key) => {
     console.log(`- ${key}: ${updateData[key]}`);
   });
@@ -101,7 +97,7 @@ async function updateAppointment(appointmentId, updateData) {
 
   const snapshot = await ref.once("value");
   const result = snapshot.val();
-  console.log("Resultado después de update:", result);
+
 
   return { ...result, id: appointmentId };
 }
