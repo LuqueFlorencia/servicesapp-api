@@ -132,7 +132,7 @@ app.get('/:dni/rating',
 // JSON inválido
 app.use(mw.jsonInvalidHandler);
 
-// 404 turas no definidas
+// 404 rutas no definidas
 app.use(mw.notFoundHandler);
 
 // Manejador global de errores
